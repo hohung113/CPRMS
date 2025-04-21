@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Logging\" />
+    <Folder Include="Configuration\" />
+    <Folder Include="DIExtensions\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Application\Core.Application.csproj" />
+    <ProjectReference Include="..\Core.Utility\Core.Utility.csproj" />
+  </ItemGroup>
+
+</Project>
