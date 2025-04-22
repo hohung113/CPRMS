@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DocumentService", "Document
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Document.API", "Document.API\Document.API.csproj", "{83F930E6-93A7-4094-A5E9-28E8D38EDD3E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthExtension", "AuthExtension\AuthExtension.csproj", "{D6A8E0AE-840D-4E3F-9750-966B7B492F30}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthExtension", "AuthExtension\AuthExtension.csproj", "{D6A8E0AE-840D-4E3F-9750-966B7B492F30}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WorkflowService", "WorkflowService", "{FAF23253-94F7-4B20-8336-AE1BEC25FA54}"
 EndProject
