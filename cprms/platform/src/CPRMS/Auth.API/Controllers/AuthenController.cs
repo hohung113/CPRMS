@@ -9,6 +9,19 @@ namespace Auth.API.Controllers
     [ApiController]
     public class AuthenController : ControllerBase
     {
+
+        [HttpGet("getnameproject")]
+        public IActionResult GetName()
+        {
+            return Ok("CPRMS Project Demo Call Service");
+        }
+
+        [HttpGet("getuser")]
+        public IActionResult GetUser()
+        {
+            var user = new { Name = "karim ho", Age = 32 };
+            return Ok(user);
+        }
         [HttpGet("googlelogin")]
         public IActionResult GoogleLogin()
         {
