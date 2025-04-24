@@ -10,4 +10,14 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ImportTemplates\" />
+    <Folder Include="Models\" />
+    <Folder Include="Dtos\" />
+    <Folder Include="Repository\Behaviours\" />
+    <Folder Include="Repository\Interfaces\" />
+    <Folder Include="Service\Behaviours\" />
+    <Folder Include="Service\Interfaces\" />
+  </ItemGroup>
+
 </Project>
