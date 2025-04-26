@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Refit" Version="8.0.0" />
     <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <!--<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />-->
   </ItemGroup>
 
   <ItemGroup>
@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Core.CPRMSServiceComponents\Core.CPRMSServiceComponents.csproj" />
     <ProjectReference Include="..\Core.Customized\Core.Customized.csproj" />
   </ItemGroup>
 
