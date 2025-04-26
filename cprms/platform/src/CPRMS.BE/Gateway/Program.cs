@@ -26,7 +26,6 @@ builder.Services.Configure<FormOptions>(options =>
 
 builder.Configuration
     .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
-    //.AddJsonFile("OcelotJson.Development/ocelot.json", optional: false, reloadOnChange: true);
 
 builder.Services.AddOcelot(builder.Configuration);
 builder.Services.AddMemoryCache();
@@ -43,7 +42,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<RequestLoggingMiddleware>();
-//app.UseMiddleware<RateLimitingMiddleware>();
 app.UseHttpsRedirection();
 await app.UseOcelot();
 app.Run();

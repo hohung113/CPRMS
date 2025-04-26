@@ -11,7 +11,12 @@ namespace Auth.API.Controllers
         [HttpGet("getnameproject")]
         public IActionResult GetName()
         {
-            return Ok("CPRMS Project Demo Call Service");
+            var user = new
+            {
+                Name = "HungHPV", 
+                Age = 18  
+            };
+            return Ok(user);
         }
         // https://localhost:7107/rms/authserver/3f2504e0-4f89-11d3-9a0c-0305e82c3301/authen/getuser
         [HttpGet("getuser")]

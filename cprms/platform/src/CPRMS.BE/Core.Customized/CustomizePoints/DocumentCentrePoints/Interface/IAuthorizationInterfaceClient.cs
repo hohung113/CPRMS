@@ -4,7 +4,7 @@ namespace Core.Customized.CustomizePoints.DocumentCentrePoints.Interface
 {
     public interface IAuthorizationInterfaceClient
     {
-        [Get("/getuser")]
+        [Get("/getnameproject")]
         Task<UserResponse> GetUserAsync();
     }
 }
