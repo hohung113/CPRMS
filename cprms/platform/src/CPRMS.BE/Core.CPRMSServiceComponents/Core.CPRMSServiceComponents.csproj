@@ -18,6 +18,7 @@
     <PackageReference Include="Confluent.Kafka" Version="2.10.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
 </Project>

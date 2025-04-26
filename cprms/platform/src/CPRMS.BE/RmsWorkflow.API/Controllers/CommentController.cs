@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.CPRMSServiceComponents.Controller;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
 
 namespace RmsWorkflow.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CommentController : ControllerBase
+    //[Route("api/[controller]")]
+    //[ApiController]
+    public class CommentController : BaseControllerV1
     {
         private readonly IHttpClientFactory _httpClientFactory;
 

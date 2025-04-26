@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using Microsoft.AspNetCore.Mvc;
 namespace Core.CPRMSServiceComponents.Controller
 {
-    internal class BaseControllerV1
+    [ApiController]
+    [Route("api/{appId:guid}/[controller]")]
+    public class BaseControllerV1 : ControllerBase
     {
+        protected Guid AppId => Guid.Parse((string)RouteData.Values["appId"]);
     }
 }

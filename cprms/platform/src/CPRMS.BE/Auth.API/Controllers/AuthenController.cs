@@ -1,25 +1,24 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Core.CPRMSServiceComponents.Controller;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Auth.API.Controllers
 {
-    [Route("api")]
-    [ApiController]
-    public class AuthenController : ControllerBase
+    public class AuthenController : BaseControllerV1
     {
         [HttpGet("getnameproject")]
         public IActionResult GetName()
         {
             return Ok("CPRMS Project Demo Call Service");
         }
-      
+        // https://localhost:7107/rms/authserver/3f2504e0-4f89-11d3-9a0c-0305e82c3301/authen/getuser
         [HttpGet("getuser")]
         public IActionResult GetUser()
         {
-            var user = new { Name = "karim ho", Age = 32 };
-            return Ok(user);
+            Guid id = this.AppId;
+            return Ok($"Tenant AppId = {AppId}");
         }
         [HttpGet("googlelogin")]
         public IActionResult GoogleLogin()

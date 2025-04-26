@@ -1,11 +1,10 @@
-﻿using Core.Customized.CustomizePoints.DocumentCentrePoints.Interface;
+﻿using Core.CPRMSServiceComponents.Controller;
+using Core.Customized.CustomizePoints.DocumentCentrePoints.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Document.API.Controllers
 {
-    [Route("api")]
-    [ApiController]
-    public class DocumentController : ControllerBase
+    public class DocumentController : BaseControllerV1
     {
         ILogger<DocumentController> _logger;
         private readonly IAuthorizationInterfaceClient _authApi;
@@ -18,7 +17,7 @@ namespace Document.API.Controllers
         [HttpGet("userinfo")]
         public async Task<IActionResult> GetUserInfo()
         {
-            // demo using refit https://localhost:7107/rsm/documentserver/api/userinfo 
+            // demo using refit https://localhost:7107/rsm/documentserver/3f2504e0-4f89-11d3-9a0c-0305e82c3301/document/userinfo 
             // refit to call between authservice and documentservice
             var result = await _authApi.GetUserAsync();
             result.Age = 22;

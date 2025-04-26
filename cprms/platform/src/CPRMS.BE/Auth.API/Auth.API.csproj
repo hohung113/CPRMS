@@ -7,8 +7,12 @@
     <UserSecretsId>67d9879c-61a2-4bf9-b654-0bf6bb3213d3</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.CPRMSServiceComponents\Core.CPRMSServiceComponents.csproj" />
   </ItemGroup>
 
 </Project>
