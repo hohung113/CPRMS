@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Repository.Context
+namespace Core.Domain.Context
 {
     public class RunTimeContext
     {

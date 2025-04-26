@@ -1,5 +1,5 @@
-﻿using Core.Repository.Entities;
-using Core.Repository.Interfaces;
+﻿using Core.Domain.Entities;
+using Core.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Repository.Implements
+namespace Core.Domain.Implements
 {
     public class DBRepository : IDBRepository
     {

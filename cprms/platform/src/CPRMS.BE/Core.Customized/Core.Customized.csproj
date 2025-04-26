@@ -8,7 +8,10 @@
 
   <ItemGroup>
     <Folder Include="CustomizePoints\DocumentCentrePoints\Enum\" />
-    <Folder Include="CustomizePoints\DocumentCentrePoints\Model\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Refit" Version="8.0.0" />
   </ItemGroup>
 
 </Project>

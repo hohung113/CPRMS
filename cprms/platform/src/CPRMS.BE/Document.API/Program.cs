@@ -1,4 +1,7 @@
 
+using Core.Customized.CustomizePoints.DocumentCentrePoints.Interface;
+using Refit;
+
 namespace Document.API;
 
 public class Program
@@ -13,6 +16,12 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        builder.Services.AddRefitClient<IAuthorizationInterfaceClient>()
+            .ConfigureHttpClient(c =>
+            {
+                c.BaseAddress = new Uri("https://localhost:7107/rms/authserver");
+            });
 
         var app = builder.Build();
 

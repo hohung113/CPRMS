@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Repository.Query
+namespace Core.Domain.Query
 {
     public class PageModel
     {

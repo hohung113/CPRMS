@@ -1,4 +1,5 @@
 using Gateway.GlobalMiddleware;
+using Microsoft.AspNetCore.Http.Features;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -11,10 +12,25 @@ builder.Services.AddCors(options => {
             .AllowCredentials()
             .SetIsOriginAllowed((hosts) => true));
 });
+builder.WebHost.UseKestrel((env, options) =>
+{
+    // No Limit for body size
+    options.Limits.MaxRequestBodySize = int.MaxValue;
+});
 
-builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+builder.Services.Configure<FormOptions>(options =>
+{
+    // Limit size file 50mb for each file upload
+    options.MultipartBodyLengthLimit = 50 * 1024 * 1024;
+});
+
+builder.Configuration
+    .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+    //.AddJsonFile("OcelotJson.Development/ocelot.json", optional: false, reloadOnChange: true);
+
 builder.Services.AddOcelot(builder.Configuration);
-
+builder.Services.AddMemoryCache();
+builder.Services.AddRateLimiting();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -25,9 +41,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-builder.Services.AddMemoryCache();
+
 app.UseMiddleware<RequestLoggingMiddleware>();
-app.UseMiddleware<RateLimitingMiddleware>();
+//app.UseMiddleware<RateLimitingMiddleware>();
 app.UseHttpsRedirection();
 await app.UseOcelot();
 app.Run();

@@ -1,4 +1,4 @@
-﻿using Core.Repository.Entities;
+﻿using Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Repository.Interfaces
+namespace Core.Domain.Interfaces
 {
     public interface IDBRepository : IDisposable
     {
