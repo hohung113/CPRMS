@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MicroServices", "MicroServi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Utility", "Core.Utility\Core.Utility.csproj", "{8C721294-DEBB-4198-B226-136C053EC7CA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Repository", "Core.Repository\Core.Repository.csproj", "{53E8C0A0-1F0F-4C97-922E-0AB27CDD227E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Domain", "Core.Repository\Core.Domain.csproj", "{53E8C0A0-1F0F-4C97-922E-0AB27CDD227E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.CPRMS", "Core.CPRMS\Core.CPRMS.csproj", "{60C61287-FBEE-4576-9F56-0938A974B128}"
 EndProject

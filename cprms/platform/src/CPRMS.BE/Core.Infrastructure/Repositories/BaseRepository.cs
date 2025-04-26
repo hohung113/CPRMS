@@ -1,8 +1,8 @@
-﻿using Core.Repository.Context;
-using Core.Repository.Entities;
-using Core.Repository.Interfaces;
-using Core.Repository.Models.Base;
-using Core.Repository.Query;
+﻿using Core.Domain.Context;
+using Core.Domain.Entities;
+using Core.Domain.Interfaces;
+using Core.Domain.Models.Base;
+using Core.Domain.Query;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Repository.Models.Base
+namespace Core.Domain.Models.Base
 {
     public class BaseDataCollection<T>
     {

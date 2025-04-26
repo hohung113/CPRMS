@@ -1,5 +1,5 @@
-﻿using Core.Repository.Models.Base;
-using Core.Repository.Query;
+﻿using Core.Domain.Models.Base;
+using Core.Domain.Query;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.Repository.Interfaces
+namespace Core.Domain.Interfaces
 {
     public interface IBaseRepository<TContext, TEntity>
     {

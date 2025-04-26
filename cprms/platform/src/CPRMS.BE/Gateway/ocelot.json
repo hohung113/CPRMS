@@ -2,15 +2,26 @@
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7107"
   },
-  "Routes": [
+  "Routes": [ // Đây là danh sách các routes mà Ocelot sẽ sử dụng để định tuyến yêu cầu từ client tới backend service.
     {
-      "UpstreamPathTemplate": "/v1/auth/{everything}",
+      /*
+      1. Đường dẫn mà Ocelot sẽ nhận yêu cầu từ client.
+      2. Ở đây, "/rms/authserver/{everything}" có nghĩa là mọi yêu cầu tới bất kỳ đường dẫn nào bắt đầu bằng /rms/authserver/ sẽ được Ocelot nhận và xử lý.
+      3. {everything} là phần wildcard (biến), nó sẽ nhận bất kỳ phần nào của URL sau /rms/authserver/ và chuyển nó vào downstream (backend service).
+      4 . example : https://localhost:7107/rms/authserver/api/getuser
+      */
+      "UpstreamPathTemplate": "/rms/authserver/{everything}",
       "UpstreamHttpMethod": [
         "Get",
         "Post",
         "Put",
         "Delete"
       ],
+      /*
+      1. Đây là đường dẫn mà Ocelot sẽ chuyển yêu cầu đến backend service.
+      2 .Trong trường hợp này, /api/{everything} có nghĩa là bất kỳ yêu cầu nào đến đường dẫn /rms/authserver/{something} sẽ được chuyển tiếp tới /api/{something} ở backend.
+      3. {everything} tương tự như ở trên, sẽ được thay thế bằng phần tương ứng từ đường dẫn upstream.
+      */
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -18,10 +29,17 @@
           "Host": "localhost",
           "Port": 7189
         }
-      ]
+      ],
+      "RateLimitOptions": {
+        "EnableRateLimiting": true,
+        "Period": "1m",
+        "PeriodTimespan": 60,
+        "Limit": 5,
+        "ByClientIp": true
+      }
     },
     {
-      "UpstreamPathTemplate": "/v1/document/{everything}",
+      "UpstreamPathTemplate": "/rsm/documentserver/{everything}",
       "UpstreamHttpMethod": [
         "Get",
         "Post",
@@ -38,7 +56,7 @@
       ]
     },
     {
-      "UpstreamPathTemplate": "/v1/workfollow/{everything}",
+      "UpstreamPathTemplate": "/rms/workfollow/{everything}",
       "UpstreamHttpMethod": [
         "Get",
         "Post",

@@ -9,13 +9,12 @@ namespace Auth.API.Controllers
     [ApiController]
     public class AuthenController : ControllerBase
     {
-
         [HttpGet("getnameproject")]
         public IActionResult GetName()
         {
             return Ok("CPRMS Project Demo Call Service");
         }
-
+      
         [HttpGet("getuser")]
         public IActionResult GetUser()
         {
