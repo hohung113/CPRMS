@@ -1,4 +1,6 @@
 
+using Core.CPRMSServiceComponents.Middlewares;
+
 namespace Auth.API;
 
 public class Program
@@ -22,7 +24,9 @@ public class Program
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+        app.UseExceptionHandler("/error");
 
+        app.UseGlobalExceptionHandlerMiddleware();
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
