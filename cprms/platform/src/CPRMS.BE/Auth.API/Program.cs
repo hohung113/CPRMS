@@ -1,5 +1,7 @@
-
+using Auth.API.Infrastructure.Persistence;
 using Core.CPRMSServiceComponents.Middlewares;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace Auth.API;
 
@@ -8,17 +10,13 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
-        // Add services to the container.
-
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        var connectionString = builder.Configuration.GetConnectionString("CprmsDb");
+        builder.Services.AddDbContext<AuthDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
         var app = builder.Build();
-
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -26,7 +24,7 @@ public class Program
         }
         app.UseExceptionHandler("/error");
 
-        app.UseGlobalExceptionHandlerMiddleware();
+        //app.UseGlobalExceptionHandlerMiddleware();
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
