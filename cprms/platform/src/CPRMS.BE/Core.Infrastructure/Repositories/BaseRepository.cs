@@ -86,12 +86,12 @@ namespace Core.Infrastructure.Repositories
 
         public async Task<List<TEntity>> GetEntities()
         {
-            return await _context.Set<TEntity>().Where(e => !e.IsDelete).ToListAsync();
+            return await _context.Set<TEntity>().Where(e => !e.IsDeleted).ToListAsync();
         }
 
         public async Task<TEntity?> GetEntity(Guid id)
         {
-            return await _context.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id && !e.IsDelete);
+            return await _context.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
         }
 
 
@@ -99,10 +99,10 @@ namespace Core.Infrastructure.Repositories
         {
             if (page.Total <= 0)
             {
-                page.Total = await _context.Set<TEntity>().CountAsync(e => !e.IsDelete);
+                page.Total = await _context.Set<TEntity>().CountAsync(e => !e.IsDeleted);
             }
             var query = _context.Set<TEntity>()
-                                .Where(e => !e.IsDelete)
+                                .Where(e => !e.IsDeleted)
                                 .OrderBy(e => e.Id); 
 
             var entities = await query.Skip(page.Start)
@@ -142,8 +142,8 @@ namespace Core.Infrastructure.Repositories
                     throw new InvalidOperationException($"Entity with ID {entity.Id} not found.");
                 }
                 _context.Entry(existingEntity).CurrentValues.SetValues(entity);
-                existingEntity.UpdateDate = this.CurrentTime;
-                existingEntity.UpdateBy = this.CurrentUserId;
+                existingEntity.LastModified = this.CurrentTime;
+                existingEntity.LastModifiedBy = this.CurrentUserId;
             }
             _context.Set<TEntity>().UpdateRange(entities);
             await _context.SaveChangesAsync();
@@ -186,11 +186,10 @@ namespace Core.Infrastructure.Repositories
             var now = DateTimeOffset.UtcNow;
 
             // Audit information
-            entity.CreateDate = now;
-            entity.UpdateDate = now;
-            entity.CreateBy = this.CurrentUserId;
-            entity.UpdateBy = this.CurrentUserId;
-            entity.IsDelete = false;
+            entity.CreatedAt = now;
+            entity.LastModified = now;
+            entity.LastModifiedBy = this.CurrentUserId;
+            entity.IsDeleted = false;
             ValidateEntity(entity);
 
             await _context.Set<TEntity>().AddAsync(entity);
@@ -214,11 +213,10 @@ namespace Core.Infrastructure.Repositories
                 if (entity.Id == Guid.Empty)
                     entity.Id = Guid.NewGuid();
 
-                entity.CreateDate = now;
-                entity.UpdateDate = now;
-                entity.CreateBy = this.CurrentUserId;
-                entity.UpdateBy = this.CurrentUserId;
-                entity.IsDelete = false;
+                entity.CreatedAt = now;
+                entity.LastModified = now;
+                entity.LastModifiedBy = this.CurrentUserId;
+                entity.IsDeleted = false;
 
                 ValidateEntity(entity); 
             }
@@ -230,12 +228,12 @@ namespace Core.Infrastructure.Repositories
             if (entity == null)
                 throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
 
-            if (entity.IsDelete)
+            if (entity.IsDeleted)
                 throw new InvalidOperationException("The entity has already been marked as deleted.");
             // Set entity's deletion information
-            entity.UpdateDate = this.CurrentTime;
-            entity.UpdateBy = this.CurrentUserId;
-            entity.IsDelete = true; // Soft delete
+            entity.LastModified = this.CurrentTime;
+            entity.LastModifiedBy = this.CurrentUserId;
+            entity.IsDeleted = true; // Soft delete
 
             return entity;
         }
@@ -247,13 +245,13 @@ namespace Core.Infrastructure.Repositories
 
             foreach (var entity in entities)
             {
-                if (entity.IsDelete)
+                if (entity.IsDeleted)
                     throw new InvalidOperationException($"Entity with ID {entity.Id} has already been marked as deleted.");
 
                 // Mark each entity as deleted
-                entity.UpdateDate = this.CurrentTime;
-                entity.UpdateBy = this.CurrentUserId;
-                entity.IsDelete = true;
+                entity.LastModified = this.CurrentTime;
+                entity.LastModifiedBy = this.CurrentUserId;
+                entity.IsDeleted = true;
             }
 
             return entities;
@@ -270,8 +268,8 @@ namespace Core.Infrastructure.Repositories
             _context.Entry(existingEntity).CurrentValues.SetValues(entity);
             if (isUpdateModifiedOn)
             {
-                existingEntity.UpdateDate = this.CurrentTime;
-                existingEntity.UpdateBy = this.CurrentUserId;
+                existingEntity.LastModified = this.CurrentTime;
+                existingEntity.LastModifiedBy = this.CurrentUserId;
             }
             _context.Entry(existingEntity).State = EntityState.Modified;
             await _context.SaveChangesAsync();
