@@ -6,14 +6,14 @@ namespace Core.Domain.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public DateTimeOffset CreateDate { get; set; }
-        public DateTimeOffset UpdateDate { get; set; }
-        public Guid CreateBy { get; set; }
-        public Guid UpdateBy { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public Guid CreatedBy { get; set; }
+        public DateTimeOffset LastModified { get; set; }
+        public Guid LastModifiedBy { get; set; }
         [Timestamp]
         public byte[] RowVersion { get; set; } = new byte[8];
+        public bool IsDeleted { get; set; }
         //public Guid? EncryptionKeyId { get; set; }
         //public EState State { get; set; }
-        public bool IsDelete { get; set; }
     }
 }

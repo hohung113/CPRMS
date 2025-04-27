@@ -1,13 +1,27 @@
-﻿using Core.CPRMSServiceComponents.Controller;
-using Microsoft.AspNetCore.Http;
+﻿using Auth.API.Infrastructure.Persistence;
+using Core.CPRMSServiceComponents.Controller;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Auth.API.Controllers
 {
     public class AuthenController : BaseControllerV1
     {
+        private readonly AuthDbContext _authDbContext;
+        //SemaphoreSlim - Semaphore
+        public AuthenController(AuthDbContext authDbContext)     
+        {
+            _authDbContext = authDbContext;
+        }
+
+        [HttpGet("getusermysql")]
+        public async Task<IActionResult> GetUserDemoMySQl()
+        {
+            
+            var userMySQl = await _authDbContext.Users.ToListAsync();
+            return Ok(userMySQl);
+        }
+
         [HttpGet("getnameproject")]
         public IActionResult GetName()
         {
@@ -19,12 +33,12 @@ namespace Auth.API.Controllers
             return Ok(user);
         }
         // https://localhost:7107/rms/authserver/3f2504e0-4f89-11d3-9a0c-0305e82c3301/authen/getuser
-        [HttpGet("getuser")]
-        public IActionResult GetUser()
-        {
-            Guid id = this.AppId;
-            return Ok($"Tenant AppId = {AppId}");
-        }
+        //[HttpGet("getuser")]
+        //public IActionResult GetUser()
+        //{
+        //    Guid id = this.AppId;
+        //    return Ok($"Tenant AppId = {AppId}");
+        //}
         [HttpGet("googlelogin")]
         public IActionResult GoogleLogin()
         {
