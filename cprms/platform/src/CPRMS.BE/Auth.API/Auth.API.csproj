@@ -7,7 +7,7 @@
     <UserSecretsId>67d9879c-61a2-4bf9-b654-0bf6bb3213d3</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,14 +20,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Core.Application\Core.Application.csproj" />
     <ProjectReference Include="..\Core.CPRMSServiceComponents\Core.CPRMSServiceComponents.csproj" />
-	  <ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj" />
-	  <ProjectReference Include="..\Core.Repository\Core.Domain.csproj" />
+    <ProjectReference Include="..\Core.CPRMS\Core.CPRMS.csproj" />
+    <ProjectReference Include="..\Core.Customized\Core.Customized.csproj" />
+    <ProjectReference Include="..\Core.DataOperate\Core.DataOperate.csproj" />
+	<ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj" />
+	<ProjectReference Include="..\Core.Repository\Core.Domain.csproj" />
+	<ProjectReference Include="..\Core.Utility\Core.Utility.csproj" />
+	<ProjectReference Include="..\Document.API\Document.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\" />
     <Folder Include="Application\" />
+    <Folder Include="Domain\" />
   </ItemGroup>
 
 </Project>

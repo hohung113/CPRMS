@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  gateway:
+    image: yourusername/gateway:latest
+    ports:
+      - "7107:7107"
+    depends_on:
+      - auth-api
+      - document-api
+      - rmsworkflow-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  auth-api:
+    image: yourusername/auth-api:latest
+    ports:
+      - "7189:7189"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  document-api:
+    image: yourusername/document-api:latest
+    ports:
+      - "7127:7127"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  rmsworkflow-api:
+    image: yourusername/rmsworkflow-api:latest
+    ports:
+      - "7288:7288"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
