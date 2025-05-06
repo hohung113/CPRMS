@@ -39,7 +39,7 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/rsm/documentserver/{everything}",
+      "UpstreamPathTemplate": "/rms/documentserver/{everything}",
       "UpstreamHttpMethod": [
         "Get",
         "Post",
