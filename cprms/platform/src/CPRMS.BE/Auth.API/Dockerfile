@@ -18,7 +18,10 @@ COPY . .
 WORKDIR "/src/Auth.API"
 RUN dotnet build "Auth.API.csproj" -c Release -o /app/build
 
+# Explicitly copy appsettings.json files to avoid conflicts
 FROM build AS publish
+COPY ["Auth.API/appsettings.json", "/app/publish/appsettings.json"]
+COPY ["Auth.API/appsettings.Development.json", "/app/publish/appsettings.Development.json"]
 RUN dotnet publish "Auth.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final

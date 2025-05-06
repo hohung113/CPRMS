@@ -28,7 +28,7 @@
 	<ProjectReference Include="..\Core.Infrastructure\Core.Infrastructure.csproj" />
 	<ProjectReference Include="..\Core.Repository\Core.Domain.csproj" />
 	<ProjectReference Include="..\Core.Utility\Core.Utility.csproj" />
-	<ProjectReference Include="..\Document.API\Document.API.csproj" />
+	
   </ItemGroup>
 
   <ItemGroup>

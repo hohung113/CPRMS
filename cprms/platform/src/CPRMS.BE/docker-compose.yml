@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   gateway:
-    image: yourusername/gateway:latest
+    image: nhatkarit/gateway:latest
     ports:
       - "7107:7107"
     depends_on:
@@ -9,25 +9,37 @@ services:
       - document-api
       - rmsworkflow-api
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      ASPNETCORE_ENVIRONMENT: Development
+    networks:
+      - cprms-network
 
   auth-api:
-    image: yourusername/auth-api:latest
+    image: nhatkarit/auth-api:latest
     ports:
       - "7189:7189"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      ASPNETCORE_ENVIRONMENT: Development
+    networks:
+      - cprms-network
 
   document-api:
-    image: yourusername/document-api:latest
+    image: nhatkarit/document-api:latest
     ports:
       - "7127:7127"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      ASPNETCORE_ENVIRONMENT: Development
+    networks:
+      - cprms-network
 
   rmsworkflow-api:
-    image: yourusername/rmsworkflow-api:latest
+    image: nhatkarit/rmsworkflow:latest
     ports:
       - "7288:7288"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      ASPNETCORE_ENVIRONMENT: Development
+    networks:
+      - cprms-network
+
+networks:
+  cprms-network:
+    driver: bridge
