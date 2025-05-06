@@ -22,6 +22,7 @@ namespace Auth.API.Controllers
             return Ok(userMySQl);
         }
 
+
         // test https://localhost:7107/authserver/123e4567-e89b-12d3-a456-426614174000/authen/getnameproject
         [HttpGet("getnameproject")]
         public IActionResult GetName()

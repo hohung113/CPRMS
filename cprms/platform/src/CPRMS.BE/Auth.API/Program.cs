@@ -34,7 +34,6 @@ public class Program
 
         //app.UseGlobalExceptionHandlerMiddleware();
         //app.UseHttpsRedirection();
-
         app.UseAuthorization();
 
 
