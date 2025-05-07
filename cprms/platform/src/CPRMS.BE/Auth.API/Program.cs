@@ -13,20 +13,27 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+            .AddEnvironmentVariables();
+
         var connectionString = builder.Configuration.GetConnectionString("CprmsDb");
         builder.Services.AddDbContext<AuthDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
         var app = builder.Build();
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+        //if (app.Environment.IsDevelopment())
+        //{
+        //    app.UseSwagger();
+        //    app.UseSwaggerUI();
+        //}
+        app.UseSwagger();
+        app.UseSwaggerUI();
         app.UseExceptionHandler("/error");
 
         //app.UseGlobalExceptionHandlerMiddleware();
-        app.UseHttpsRedirection();
-
+        //app.UseHttpsRedirection();
         app.UseAuthorization();
 
 
