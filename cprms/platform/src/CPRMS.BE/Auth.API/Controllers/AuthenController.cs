@@ -22,6 +22,8 @@ namespace Auth.API.Controllers
             return Ok(userMySQl);
         }
 
+
+        // test https://localhost:7107/authserver/123e4567-e89b-12d3-a456-426614174000/authen/getnameproject
         [HttpGet("getnameproject")]
         public IActionResult GetName()
         {
@@ -32,13 +34,6 @@ namespace Auth.API.Controllers
             };
             return Ok(user);
         }
-        // https://localhost:7107/rms/authserver/3f2504e0-4f89-11d3-9a0c-0305e82c3301/authen/getuser
-        //[HttpGet("getuser")]
-        //public IActionResult GetUser()
-        //{
-        //    Guid id = this.AppId;
-        //    return Ok($"Tenant AppId = {AppId}");
-        //}
         [HttpGet("googlelogin")]
         public IActionResult GoogleLogin()
         {
@@ -60,19 +55,6 @@ namespace Auth.API.Controllers
         {
             if (string.IsNullOrEmpty(code))
                 return BadRequest("Authorization code is missing!");
-
-            // Đổi Authorization Code lấy Access Token từ Google
-            //var tokenResponse = await GetGoogleAccessToken(code);
-
-            //if (tokenResponse == null || string.IsNullOrEmpty(tokenResponse.access_token))
-            //    return BadRequest("Failed to retrieve access token from Google.");
-
-            //// Lấy thông tin user từ Access Token
-            //var userInfo = await GetGoogleUserInfo(tokenResponse.access_token);
-
-            // Trả về thông tin user (hoặc tạo JWT token nếu bạn có hệ thống authentication)
-            //return Ok(new { user = userInfo, access_token = tokenResponse.access_token });
-           // var user = await _userRepository.GoogleLoginAsync(userInfo.Email, userInfo.Name);
             return Ok();
 
         }

@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthExtension.DTOs
+namespace Core.Application.Interfaces
 {
-    public class AuthResponse
+    public interface ITenantConnectionProvider
     {
+        string GetConnectionString(string dbName);
     }
 }

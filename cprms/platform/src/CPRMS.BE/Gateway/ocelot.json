@@ -1,32 +1,16 @@
 {
   "GlobalConfiguration": {
-    "BaseUrl": "https://localhost:7107"
+    "BaseUrl": "http://gateway:7107"
   },
-  "Routes": [ // Đây là danh sách các routes mà Ocelot sẽ sử dụng để định tuyến yêu cầu từ client tới backend service.
+  "Routes": [
     {
-      /*
-      1. Đường dẫn mà Ocelot sẽ nhận yêu cầu từ client.
-      2. Ở đây, "/rms/authserver/{everything}" có nghĩa là mọi yêu cầu tới bất kỳ đường dẫn nào bắt đầu bằng /rms/authserver/ sẽ được Ocelot nhận và xử lý.
-      3. {everything} là phần wildcard (biến), nó sẽ nhận bất kỳ phần nào của URL sau /rms/authserver/ và chuyển nó vào downstream (backend service).
-      4 . example : https://localhost:7107/rms/authserver/api/getuser
-      */
-      "UpstreamPathTemplate": "/rms/authserver/{everything}",
-      "UpstreamHttpMethod": [
-        "Get",
-        "Post",
-        "Put",
-        "Delete"
-      ],
-      /*
-      1. Đây là đường dẫn mà Ocelot sẽ chuyển yêu cầu đến backend service.
-      2 .Trong trường hợp này, /api/{everything} có nghĩa là bất kỳ yêu cầu nào đến đường dẫn /rms/authserver/{something} sẽ được chuyển tiếp tới /api/{something} ở backend.
-      3. {everything} tương tự như ở trên, sẽ được thay thế bằng phần tương ứng từ đường dẫn upstream.
-      */
-      "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/authserver/{appId}/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/{appId}/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "auth-api",
           "Port": 7189
         }
       ],
@@ -39,35 +23,25 @@
       }
     },
     {
-      "UpstreamPathTemplate": "/rms/documentserver/{everything}",
-      "UpstreamHttpMethod": [
-        "Get",
-        "Post",
-        "Put",
-        "Delete"
-      ],
-      "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/documentserver/{appId}/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/{appId}/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "document-api",
           "Port": 7127
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/rms/workfollow/{everything}",
-      "UpstreamHttpMethod": [
-        "Get",
-        "Post",
-        "Put",
-        "Delete"
-      ],
-      "DownstreamPathTemplate": "/api/{everything}",
-      "DownstreamScheme": "https",
+      "UpstreamPathTemplate": "/workfollow/{appId}/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+      "DownstreamPathTemplate": "/api/{appId}/{everything}",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
+          "Host": "rmsworkflow-api",
           "Port": 7288
         }
       ]
