@@ -1,16 +1,16 @@
 {
   "GlobalConfiguration": {
-    "BaseUrl": "http://gateway:7107"
+    "BaseUrl": "https://localhost:7107"
   },
   "Routes": [
     {
       "UpstreamPathTemplate": "/authserver/{appId}/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "DownstreamPathTemplate": "/api/{appId}/{everything}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "auth-api",
+          "Host": "localhost",
           "Port": 7189
         }
       ],
@@ -26,25 +26,78 @@
       "UpstreamPathTemplate": "/documentserver/{appId}/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "DownstreamPathTemplate": "/api/{appId}/{everything}",
-      "DownstreamScheme": "http",
+      "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
-          "Host": "document-api",
+          "Host": "localhost",
           "Port": 7127
         }
       ]
     },
     {
-      "UpstreamPathTemplate": "/workfollow/{appId}/{everything}",
+      "UpstreamPathTemplate": "/rmsworkflow/{appId}/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "DownstreamPathTemplate": "/api/{appId}/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "rmsworkflow-api",
+          "Host": "localhost",
           "Port": 7288
         }
       ]
     }
   ]
 }
+
+
+
+//{
+//  "GlobalConfiguration": {
+//    "BaseUrl": "https://gateway:7107"
+//  },
+//  "Routes": [
+//    {
+//      "UpstreamPathTemplate": "/authserver/{appId}/{everything}",
+//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+//      "DownstreamPathTemplate": "/api/{appId}/{everything}",
+//      "DownstreamScheme": "https",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "auth-api",
+//          "Port": 7189
+//        }
+//      ],
+//      "RateLimitOptions": {
+//        "EnableRateLimiting": true,
+//        "Period": "1m",
+//        "PeriodTimespan": 60,
+//        "Limit": 5,
+//        "ByClientIp": true
+//      }
+//    },
+//    {
+//      "UpstreamPathTemplate": "/documentserver/{appId}/{everything}",
+//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+//      "DownstreamPathTemplate": "/api/{appId}/{everything}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "document-api",
+//          "Port": 7127
+//        }
+//      ]
+//    },
+//    {
+//      "UpstreamPathTemplate": "/workfollow/{appId}/{everything}",
+//      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+//      "DownstreamPathTemplate": "/api/{appId}/{everything}",
+//      "DownstreamScheme": "http",
+//      "DownstreamHostAndPorts": [
+//        {
+//          "Host": "rmsworkflow-api",
+//          "Port": 7288
+//        }
+//      ]
+//    }
+//  ]
+//}
