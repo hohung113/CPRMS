@@ -19,10 +19,8 @@ namespace Document.API.Controllers
         [HttpGet("userinfo")]
         public async Task<BaseResponse<UserResponse>> GetUserInfo()
         {
-            // demo using refit https://localhost:7107/rsm/documentserver/3f2504e0-4f89-11d3-9a0c-0305e82c3301/document/userinfo 
             // refit to call between authservice and documentservice
             // var result = await _authApi.GetUserAsync();
-
             var response = new UserResponse
             {
                 Age = 22,
@@ -30,7 +28,6 @@ namespace Document.API.Controllers
             };
             return await this.Run<UserResponse>(_logger, async () => response);
         }
-        // Test UserInforResponse
     }
     public class UserResponse
     {
