@@ -1,27 +1,32 @@
 ﻿using Auth.API.Infrastructure.Persistence;
+using Core.Application.ServiceModel;
 using Core.CPRMSServiceComponents.Controller;
-using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 
 namespace Auth.API.Controllers
 {
     public class AuthenController : BaseControllerV1
     {
-        ILogger<AuthenController> _logger;
-        public AuthenController(ILogger<AuthenController> logger)
+        private readonly AuthDbContext _authDbContext;
+        private readonly ILogger<AuthenController> _logger;
+        private readonly AccountSettings _accountSettings;
+        public AuthenController(ILogger<AuthenController> logger, AuthDbContext authDbContext, IOptions<AccountSettings> options)
         {
             _logger = logger;
+            _authDbContext = authDbContext;
+            _accountSettings = options.Value;
         }
         private string AppId => RouteData?.Values["appId"]?.ToString();
-        // private readonly AuthDbContext _authDbContext;
+     
         //SemaphoreSlim - Semaphore
 
         [HttpGet("getnameproject")]
@@ -51,13 +56,14 @@ namespace Auth.API.Controllers
             {
                 return Unauthorized("Authentication failed.");
             }
-
+            // test
             var accessToken = authResult.Properties.GetTokenValue("access_token");
-
+            var claims = authResult.Principal.Claims;
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value
+                     ?? claims.FirstOrDefault(c => c.Type == "email")?.Value
+                     ?? claims.FirstOrDefault(c => c.Type == "urn:google:email")?.Value;
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-
-            // Gọi Google UserInfo endpoint để lấy thông tin chi tiết (có avatar)
             var response = await client.GetAsync("https://www.googleapis.com/oauth2/v2/userinfo");
 
             if (!response.IsSuccessStatusCode)
@@ -114,39 +120,6 @@ namespace Auth.API.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
-        //[HttpGet("getusermysql")]
-        //public async Task<IActionResult> GetUserDemoMySQl()
-        //{
-            
-        //    var userMySQl = await _authDbContext.Users.ToListAsync();
-        //    return Ok(userMySQl);
-        //}
-
-        //[HttpGet("googlelogin")]
-        //public IActionResult GoogleLogin()
-        //{
-        //    var clientId = "75558424470-h5fg4osu2s6q7kur53fse0dq0tj3m6bc.apps.googleusercontent.com";
-        //    //var redirectUri = "https://localhost:7093/api/user/Auth/google-callback";
-        //    var redirectUri = "https://localhost:7092/Login?handler=GoogleCallback";
-        //    var googleAuthUrl = $"https://accounts.google.com/o/oauth2/auth" +
-        //                        $"?client_id={clientId}" +
-        //                        $"&redirect_uri={redirectUri}" +
-        //                        $"&response_type=code" +
-        //                        $"&scope=openid%20email%20profile" +
-        //                        $"&access_type=offline";
-
-        //    return Redirect(googleAuthUrl);
-        //}
-
-        //[HttpGet("google-callback")]
-        //public async Task<IActionResult> GoogleCallback([FromQuery] string code)
-        //{
-        //    if (string.IsNullOrEmpty(code))
-        //        return BadRequest("Authorization code is missing!");
-        //    return Ok();
-
-        //}
         public class GoogleUserInfo
         {
             public string Id { get; set; }
