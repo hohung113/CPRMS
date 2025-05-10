@@ -1,3 +1,6 @@
+using Core.Application.Interfaces;
+using Core.Application.Tenancy;
+using Core.Infrastructure.Services;
 using Gateway.GlobalMiddleware;
 using Microsoft.AspNetCore.Http.Features;
 using Ocelot.DependencyInjection;
@@ -24,8 +27,13 @@ builder.Services.Configure<FormOptions>(options =>
     options.MultipartBodyLengthLimit = 50 * 1024 * 1024;
 });
 
-builder.Configuration
-    .AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+builder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<TenantContext>(); 
+builder.Services.AddScoped<ITenantSetter>(sp => sp.GetRequiredService<TenantContext>());
+builder.Services.AddScoped<ITenantInfo>(sp => sp.GetRequiredService<TenantContext>().CurrentTenant);
+builder.Services.AddScoped<ITenantStore, DatabaseTenantStore>();
 
 builder.Services.AddOcelot(builder.Configuration);
 builder.Services.AddMemoryCache();
@@ -36,9 +44,10 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 
-app.UseSwagger();
-app.UseSwaggerUI();
+//app.UseSwagger();
+//app.UseSwaggerUI();
 app.UseMiddleware<RequestLoggingMiddleware>();
 app.UseMiddleware<TenantValidationMiddleware>();
+//app.UseMiddleware<TenantResolutionMiddleware>();
 await app.UseOcelot();
 app.Run();
