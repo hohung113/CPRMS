@@ -13,6 +13,7 @@ build/
 .next/
 
 # Environment
+.env
 .env.local
 .env.development
 .env.test
