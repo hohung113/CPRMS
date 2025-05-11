@@ -9,6 +9,7 @@ namespace Core.Domain.Entities
         public string FullName { get; set; }
         public Campus Campus { get; set; }
         public bool IsBlock { get; set; }
+        public string ProfileImage { get; set; }
         public Guid CurriculumnId { get; set; } 
     }
 }
