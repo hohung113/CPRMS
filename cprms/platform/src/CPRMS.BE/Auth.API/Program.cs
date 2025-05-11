@@ -1,5 +1,7 @@
 using Auth.API.Infrastructure.Persistence;
+using Core.Application.ServiceModel;
 using Core.CPRMSServiceComponents.Middlewares;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,20 +42,22 @@ public class Program
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = builder.Configuration["Jwt:Issuer"],
                 ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
             };
         })
         .AddGoogle(options =>
         {
             options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
             options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+            options.Scope.Add("email");
+            options.Scope.Add("profile");
+            options.ClaimActions.MapJsonKey("urn:google:email", "email", "string");
             options.SaveTokens = true;
         });
 
-        var connectionString = builder.Configuration.GetConnectionString("CprmsDb");
-        //builder.Services.AddDbContext<AuthDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
-
+        var connectionString = builder.Configuration.GetConnectionString("AuthDb");
+        builder.Services.AddDbContext<AuthDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+        builder.Services.Configure<AccountSettings>(builder.Configuration.GetSection("Account"));
         var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
