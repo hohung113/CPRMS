@@ -84,18 +84,18 @@ namespace Core.Infrastructure.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public async Task<List<TEntity>> GetEntities()
+        public virtual async Task<List<TEntity>> GetEntities()
         {
             return await _context.Set<TEntity>().Where(e => !e.IsDeleted).ToListAsync();
         }
 
-        public async Task<TEntity?> GetEntity(Guid id)
+        public virtual async Task<TEntity?> GetEntity(Guid id)
         {
             return await _context.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
         }
 
 
-        public async Task<BaseDataCollection<TEntity>> QueryEntities(PageModel page)
+        public virtual async Task<BaseDataCollection<TEntity>> QueryEntities(PageModel page)
         {
             if (page.Total <= 0)
             {
@@ -123,7 +123,7 @@ namespace Core.Infrastructure.Repositories
         }
 
 
-        public async Task<List<TEntity>> UpdateEntities(List<TEntity> entities)
+        public virtual async Task<List<TEntity>> UpdateEntities(List<TEntity> entities)
         {
             if (entities == null || entities.Count == 0)
             {
@@ -151,7 +151,7 @@ namespace Core.Infrastructure.Repositories
             return entities;
         }
 
-        public async Task<Boolean> UpdateEntity(TEntity entity, bool isUpdateModifiedOn = true)
+        public virtual async Task<Boolean> UpdateEntity(TEntity entity, bool isUpdateModifiedOn = true)
         {
             if (entity == null)
             {
@@ -160,7 +160,7 @@ namespace Core.Infrastructure.Repositories
             return await UpdateEntityCommon(entity, isUpdateModifiedOn);
         }
 
-        public async Task<TEntity> UpdateEntity(TEntity entity, Tuple<string, SqlParameter[]> condition)
+        public virtual async Task<TEntity> UpdateEntity(TEntity entity, Tuple<string, SqlParameter[]> condition)
         {
             // Nen thiet ke sao cho can chuyen doi giua EF Core va sql raw cho mot so truong hop can thiet
             throw new Exception();

@@ -8,12 +8,16 @@
 
   <ItemGroup>
     <Folder Include="RoleManagement\" />
-    <Folder Include="UserManagement\Commands\" />
-    <Folder Include="UserManagement\Validators\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Application\Core.Application.csproj" />
   </ItemGroup>
 
 </Project>

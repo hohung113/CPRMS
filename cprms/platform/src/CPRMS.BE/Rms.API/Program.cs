@@ -1,11 +1,9 @@
-using Core.Api;
 using Core.Application.ServiceModel;
 using Core.CPRMSServiceComponents.ServiceComponents.JWTService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Rms.Infrastructure.Persistence;
+using Rms.Infrastructure.Extensions;
 using System.Text;
 
 public class Program
@@ -21,11 +19,8 @@ public class Program
             //options.LowercaseQueryStrings = true;
         });
         builder.Services.AddSwaggerGen();
-        // Add DI Services
-        //builder.Services.AddCPRMSServiceComponents();
         builder.Services.AddScoped<TokenService>();
-        var connectionString = builder.Configuration.GetConnectionString("EntityFrameworkConnectionString");
-        builder.Services.AddDbContext<RmsDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+        builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.Configure<AccountSettings>(builder.Configuration.GetSection("Account"));
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
@@ -77,7 +72,6 @@ public class Program
         app.UseSwaggerUI();
         app.UseExceptionHandler("/error");
         app.UseCors("AllowAll");
-        //app.UseGlobalExceptionHandlerMiddleware();
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseAuthentication();

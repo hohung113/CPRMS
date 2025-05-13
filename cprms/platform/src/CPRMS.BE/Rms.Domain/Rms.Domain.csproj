@@ -10,4 +10,10 @@
     <ProjectReference Include="..\Core.Repository\Core.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Constants\" />
+  </ItemGroup>
+
 </Project>

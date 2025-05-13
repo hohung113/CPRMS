@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core.CPRMSServiceComponents\Core.Api.csproj" />
+    <ProjectReference Include="..\Rms.Application\Rms.Application.csproj" />
     <ProjectReference Include="..\Rms.Infrastructure\Rms.Infrastructure.csproj" />
   </ItemGroup>
 
