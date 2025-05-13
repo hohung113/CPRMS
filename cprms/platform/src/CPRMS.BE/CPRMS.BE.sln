@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Domain", "Core.Reposit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Infrastructure", "Core.Infrastructure\Core.Infrastructure.csproj", "{8287676E-7395-403B-AB4B-30AF2EA45F16}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.CPRMSServiceComponents", "Core.CPRMSServiceComponents\Core.CPRMSServiceComponents.csproj", "{023DB2F5-50C5-44C4-BE49-80BE8F0D49BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Api", "Core.CPRMSServiceComponents\Core.Api.csproj", "{023DB2F5-50C5-44C4-BE49-80BE8F0D49BD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.Application", "Core.Application\Core.Application.csproj", "{A990651A-775D-49A5-8A16-0A580EAA4C83}"
 EndProject
@@ -34,6 +34,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rms.Application.Tests", "Rms.Application.Tests\Rms.Application.Tests.csproj", "{2E30D77C-0775-4C23-B1F7-D67156E4CC39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rms.Infrastructure.Tests", "Rms.Infrastructure.Tests\Rms.Infrastructure.Tests.csproj", "{6DFD1851-2C0E-492E-8EAA-4D1282D44353}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Logger", "Core.Logger\Core.Logger.csproj", "{37E90802-F4E4-40BD-9B92-39BB0AC7FF3A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -93,6 +95,10 @@ Global
 		{6DFD1851-2C0E-492E-8EAA-4D1282D44353}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DFD1851-2C0E-492E-8EAA-4D1282D44353}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DFD1851-2C0E-492E-8EAA-4D1282D44353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37E90802-F4E4-40BD-9B92-39BB0AC7FF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E90802-F4E4-40BD-9B92-39BB0AC7FF3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E90802-F4E4-40BD-9B92-39BB0AC7FF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E90802-F4E4-40BD-9B92-39BB0AC7FF3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -111,6 +117,7 @@ Global
 		{4CD30817-7BC2-4741-AB8A-B2D344B850C5} = {133E0971-E2DA-4E4E-9715-432B791ED29F}
 		{2E30D77C-0775-4C23-B1F7-D67156E4CC39} = {133E0971-E2DA-4E4E-9715-432B791ED29F}
 		{6DFD1851-2C0E-492E-8EAA-4D1282D44353} = {133E0971-E2DA-4E4E-9715-432B791ED29F}
+		{37E90802-F4E4-40BD-9B92-39BB0AC7FF3A} = {8CD8B977-0EE2-44AA-B217-65F5BB8AE47B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88684251-7A2F-41BC-B857-2B6CB8402CC6}

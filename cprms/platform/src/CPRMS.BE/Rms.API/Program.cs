@@ -1,3 +1,4 @@
+using Core.Api;
 using Core.Application.ServiceModel;
 using Core.CPRMSServiceComponents.ServiceComponents.JWTService;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -21,6 +22,7 @@ public class Program
         });
         builder.Services.AddSwaggerGen();
         // Add DI Services
+        //builder.Services.AddCPRMSServiceComponents();
         builder.Services.AddScoped<TokenService>();
         var connectionString = builder.Configuration.GetConnectionString("EntityFrameworkConnectionString");
         builder.Services.AddDbContext<RmsDbContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));

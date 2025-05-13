@@ -1,19 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
-namespace Core.CPRMSServiceComponents.Controller
+﻿using Core.Api.MediatRCustom;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Core.Api.Controller
 {
+    //[Route("api/{appId:guid}/[controller]")]
     [ApiController]
-    [Route("api/{appId:guid}/[controller]")]
+    [Authorize]
+    [Route("api/v1/[controller]")]
     public class BaseControllerV1 : ControllerBase
     {
-        protected Guid AppId
-        {
-            get
-            {
-                if (Guid.TryParse((string)RouteData.Values["appId"], out var id))
-                    return id;
-                throw new ArgumentException("Invalid appId");
-            }
-        }
-
+        //private readonly IDispatcher _dispatcher;
+        //protected IDispatcher Dispatcher => _dispatcher;
     }
 }

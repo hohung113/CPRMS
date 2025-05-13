@@ -1,21 +1,21 @@
-﻿using Core.Application.ServiceModel;
-using Core.CPRMSServiceComponents.Controller;
+﻿using Core.Api.Controller;
+using Core.Api.MediatRCustom;
+using Core.Application.ServiceModel;
 using Core.CPRMSServiceComponents.ServiceComponents.JWTService;
 using Core.Domain.Entities;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Rms.Infrastructure.Persistence;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Text.Json;
 using System.Text;
-using Rms.Infrastructure.Persistence;
-using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Rms.API.Controllers
 {
@@ -25,6 +25,7 @@ namespace Rms.API.Controllers
         private readonly RmsDbContext _authDbContext;
         private readonly AccountSettings _accountSettings;
         private readonly TokenService _tokenService;
+   
         public AuthenController(
             ILogger<AuthenController> logger,
             IOptions<AccountSettings> options,
@@ -32,6 +33,7 @@ namespace Rms.API.Controllers
             TokenService tokenService
             )
         {
+
             _logger = logger;
             _authDbContext = authDbContext;
             _accountSettings = options.Value;
