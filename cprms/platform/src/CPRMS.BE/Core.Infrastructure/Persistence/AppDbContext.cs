@@ -1,7 +1,5 @@
 ﻿using Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq.Expressions;
 
 
 namespace Core.Infrastructure.Persistence
