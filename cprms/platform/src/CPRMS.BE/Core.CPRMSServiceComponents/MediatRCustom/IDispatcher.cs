@@ -1,4 +1,5 @@
 ﻿using Azure.Core;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,16 @@ namespace Core.Api.MediatRCustom
     public interface IDispatcher
     {
         /// <summary>
-        /// Gửi một command hoặc query và nhận kết quả.
+        /// Gửi một request (command hoặc query) và nhận lại kết quả.
         /// </summary>
-        /// <typeparam name="TResponse">Kiểu của kết quả trả về.</typeparam>
+        /// <typeparam name="TResponse">Kiểu dữ liệu trả về.</typeparam>
         /// <param name="request">Command hoặc query cần xử lý.</param>
         /// <param name="cancellationToken">Token hủy bỏ.</param>
-        /// <returns>Kết quả của command/query.</returns>
+        /// <returns>Kết quả xử lý.</returns>
         Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Gửi một command hoặc query không trả về kết quả.
+        /// Gửi một request (command hoặc query) không trả về kết quả.
         /// </summary>
         /// <param name="request">Command hoặc query cần xử lý.</param>
         /// <param name="cancellationToken">Token hủy bỏ.</param>
@@ -32,15 +33,7 @@ namespace Core.Api.MediatRCustom
     /// <summary>
     /// Marker interface cho các command hoặc query.
     /// </summary>
-    public interface IRequest
-    {
-    }
+    public interface IRequest : MediatR.IRequest<Unit> { }
 
-    /// <summary>
-    /// Marker interface cho các command hoặc query có kết quả.
-    /// </summary>
-    /// <typeparam name="TResponse">Kiểu của kết quả trả về.</typeparam>
-    public interface IRequest<TResponse> : IRequest
-    {
-    }
+    public interface IRequest<TResponse> : MediatR.IRequest<TResponse> { }
 }
