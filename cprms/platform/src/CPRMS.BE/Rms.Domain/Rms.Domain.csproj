@@ -14,6 +14,12 @@
     <Folder Include="Exceptions\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Constants\" />
+    <Folder Include="Modules\Documents\Entity\" />
+    <Folder Include="Modules\Documents\Interface\" />
+    <Folder Include="Modules\Documents\ValueObject\" />
+    <Folder Include="Modules\UserSystem\Entity\" />
+    <Folder Include="Modules\UserSystem\Interface\" />
+    <Folder Include="Modules\UserSystem\ValueObject\" />
   </ItemGroup>
 
 </Project>

@@ -7,7 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="RoleManagement\" />
+    <Folder Include="Modules\UserManagement\Dto\" />
+    <Folder Include="Modules\UserManagement\CommandHandler\" />
+    <Folder Include="Modules\UserManagement\IntegrationEventHandler\" />
+    <Folder Include="Modules\UserManagement\Command\" />
+    <Folder Include="Modules\UserManagement\QueryHandler\" />
+    <Folder Include="Modules\UserManagement\Validator\" />
+    <Folder Include="RoleManagement\Command\" />
+    <Folder Include="RoleManagement\CommandHandler\" />
+    <Folder Include="RoleManagement\Dto\" />
+    <Folder Include="RoleManagement\Validator\" />
+    <Folder Include="RoleManagement\QueryHandler\" />
   </ItemGroup>
 
   <ItemGroup>
