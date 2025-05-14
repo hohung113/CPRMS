@@ -12,11 +12,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Modules\UserSystem\Specification\" />
+    <Folder Include="Modules\UserSystem\Service\" />
+    <Folder Include="Modules\UserSystem\Repository\" />
+    <Folder Include="Modules\UserSystem\Query\" />
     <Folder Include="Storage\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="8.0.0" />
+    <PackageReference Include="Quartz" Version="3.14.0" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.14.0" />
   </ItemGroup>
 
 </Project>

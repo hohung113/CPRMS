@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Rms.Infrastructure\Rms.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Modules\UserManagement\" />
+  </ItemGroup>
+
 </Project>
