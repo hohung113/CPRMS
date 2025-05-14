@@ -18,7 +18,6 @@
     <Folder Include="Modules\Documents\Interface\" />
     <Folder Include="Modules\Documents\ValueObject\" />
     <Folder Include="Modules\UserSystem\Entity\" />
-    <Folder Include="Modules\UserSystem\Interface\" />
     <Folder Include="Modules\UserSystem\ValueObject\" />
   </ItemGroup>
 

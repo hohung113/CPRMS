@@ -1,6 +1,7 @@
 ﻿using Core.CPRMSServiceComponents.Controller;
 using Core.Domain.Models.Base;
 using Microsoft.EntityFrameworkCore;
+using Rms.Application.Modules.UserManagement.Command;
 using Rms.Infrastructure.Persistence;
 
 namespace Rms.API.Controllers.Modules.Users
@@ -9,17 +10,28 @@ namespace Rms.API.Controllers.Modules.Users
     {
         private readonly ILogger<AuthenController> _logger;
         private readonly RmsDbContext _rmsDbContext;
+        private readonly IMediator _mediator;
         public AuthenController(
             ILogger<AuthenController> logger,
-            RmsDbContext rmsDbContext
+            RmsDbContext rmsDbContext,
+            IMediator mediator
             )
         {
             _rmsDbContext = rmsDbContext;
             _logger = logger;
+            _mediator = mediator;
         }
 
         private string AppId => RouteData?.Values["appId"]?.ToString();
 
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        //{
+        //    var isSuccess = await _mediator.Send(command);
+        //    if (isSuccess)
+        //        return Ok(new { Message = "Login successful" });
+        //    return Unauthorized(new { Message = "Invalid email or password" });
+        //}
         [HttpGet("getmemberofprojectCPRMS")]
         public async Task<BaseResponse<UserResponse>> GetName()
         {
