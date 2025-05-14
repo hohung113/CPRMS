@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Dtos\**" />
     <Compile Remove="Validation\**" />
+    <EmbeddedResource Remove="Dtos\**" />
     <EmbeddedResource Remove="Validation\**" />
+    <None Remove="Dtos\**" />
     <None Remove="Validation\**" />
   </ItemGroup>
 
@@ -16,10 +19,6 @@
     <PackageReference Include="FluentValidation" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
     <PackageReference Include="StackExchange.Redis" Version="2.8.31" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dtos\" />
   </ItemGroup>
 
 </Project>

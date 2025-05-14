@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Constants\**" />
+    <Compile Remove="Exceptions\**" />
+    <Compile Remove="Interfaces\**" />
+    <Compile Remove="Modules\**" />
+    <EmbeddedResource Remove="Constants\**" />
+    <EmbeddedResource Remove="Exceptions\**" />
+    <EmbeddedResource Remove="Interfaces\**" />
+    <EmbeddedResource Remove="Modules\**" />
+    <None Remove="Constants\**" />
+    <None Remove="Exceptions\**" />
+    <None Remove="Interfaces\**" />
+    <None Remove="Modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\Core.Domain\Core.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
