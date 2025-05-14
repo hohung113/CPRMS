@@ -7,17 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Modules\UserManagement\Dto\" />
+    <Compile Remove="RoleManagement\**" />
+    <EmbeddedResource Remove="RoleManagement\**" />
+    <None Remove="RoleManagement\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Modules\Groups\" />
+    <Folder Include="Modules\Documents\" />
     <Folder Include="Modules\UserManagement\CommandHandler\" />
     <Folder Include="Modules\UserManagement\IntegrationEventHandler\" />
     <Folder Include="Modules\UserManagement\Command\" />
     <Folder Include="Modules\UserManagement\QueryHandler\" />
     <Folder Include="Modules\UserManagement\Validator\" />
-    <Folder Include="RoleManagement\Command\" />
-    <Folder Include="RoleManagement\CommandHandler\" />
-    <Folder Include="RoleManagement\Dto\" />
-    <Folder Include="RoleManagement\Validator\" />
-    <Folder Include="RoleManagement\QueryHandler\" />
   </ItemGroup>
 
   <ItemGroup>

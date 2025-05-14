@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Modules\UserManagement\**" />
+    <Content Remove="Controllers\Modules\UserManagement\**" />
+    <EmbeddedResource Remove="Controllers\Modules\UserManagement\**" />
+    <None Remove="Controllers\Modules\UserManagement\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
@@ -26,10 +33,6 @@
     <ProjectReference Include="..\Core.CPRMSServiceComponents\Core.Api.csproj" />
     <ProjectReference Include="..\Rms.Application\Rms.Application.csproj" />
     <ProjectReference Include="..\Rms.Infrastructure\Rms.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\Modules\UserManagement\" />
   </ItemGroup>
 
 </Project>

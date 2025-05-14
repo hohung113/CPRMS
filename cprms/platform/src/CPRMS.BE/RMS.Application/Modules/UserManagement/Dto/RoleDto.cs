@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Rms.Application.UserManagement.Commands.LoginWithEmail
+namespace Rms.Application.Modules.UserManagement.Dto
 {
-    internal class LoginWithEmailCommandHandler
+    internal class RoleDto
     {
     }
 }

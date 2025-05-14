@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Domain.Entities;
 using Core.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Core.Domain.Entities;
+using System.Reflection;
 
 namespace Rms.Infrastructure.Persistence
 {
@@ -31,6 +25,7 @@ namespace Rms.Infrastructure.Persistence
             var headOfDepartment = new Guid("b3c3ef89-fb6f-4cbe-8040-7c2f13d8c291");
             var evaluationCommitee = new Guid("93d6f134-dae2-4d84-a4a9-e391cc32ed55");
             var lecture = new Guid("8ec3ea62-fb1b-4a6c-bbb0-45ea56a21827");
+            var admin = new Guid("8ec3ea62-fb1b-4a6c-bbb0-45ea56a21828");
 
             modelBuilder.Entity<Role>().HasData(
                 new Role
@@ -57,6 +52,11 @@ namespace Rms.Infrastructure.Persistence
                 {
                     Id = lecture,
                     RoleName = "Lecture",
+                },
+                new Role
+                {
+                    Id = admin,
+                    RoleName ="Admin"
                 }
             );
         }
