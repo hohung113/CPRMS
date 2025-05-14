@@ -1,3 +1,5 @@
+using Core.Api.MediatRCustom;
+using Core.Api.Middlewares;
 using Core.Application.ServiceModel;
 using Core.CPRMSServiceComponents.ServiceComponents.JWTService;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -18,6 +20,12 @@ public class Program
             options.LowercaseUrls = true;
             //options.LowercaseQueryStrings = true;
         });
+        builder.Services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(IDispatcher).Assembly);
+            //cfg.RegisterServicesFromAssembly(typeof().Assembly);
+        });
+        builder.Services.AddScoped<IDispatcher, Dispatcher>();
         builder.Services.AddSwaggerGen();
         builder.Services.AddScoped<TokenService>();
         builder.Services.AddInfrastructure(builder.Configuration);
@@ -71,9 +79,10 @@ public class Program
         app.UseSwagger();
         app.UseSwaggerUI();
         app.UseExceptionHandler("/error");
-        app.UseCors("AllowAll");
+        app.UseMiddleware<TenantResolutionMiddleware>();
         app.UseHttpsRedirection();
         app.UseRouting();
+        app.UseCors("AllowAll");
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();

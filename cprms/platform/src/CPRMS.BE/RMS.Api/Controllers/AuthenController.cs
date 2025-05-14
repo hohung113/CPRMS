@@ -1,4 +1,8 @@
-﻿namespace Rms.API.Controllers
+﻿using Azure;
+using Core.CPRMSServiceComponents.Controller;
+using Core.Domain.Models.Base;
+
+namespace Rms.API.Controllers
 {
     public class AuthenController : BaseControllerV1
     {
@@ -8,20 +12,19 @@
             ILogger<AuthenController> logger
             )
         {
-
             _logger = logger;
         }
 
         private string AppId => RouteData?.Values["appId"]?.ToString();
 
         [HttpGet("getmemberofprojectCPRMS")]
-        public IActionResult GetName()
+        public async Task<BaseResponse<UserResponse>> GetName()
         {
-            var user = new
+            var response = new UserResponse
             {
-                TeamMember = "HungHPV - NhatNDA - TrieuLQ - QuyND - KhoaDD",
+                Name = "HungHPV - NhatNDA - TrieuLQ - QuyND - KhoaDD",
             };
-            return Ok(user);
+            return await this.Run<UserResponse>(_logger, async () => response);
         }
 
         //[HttpPost("login")]
@@ -134,6 +137,9 @@
         //    public string Name { get; set; }
         //    public string Picture { get; set; }
         //}
-
+        public class UserResponse
+        {
+            public string Name { get; set; }
+        }
     }
 }
