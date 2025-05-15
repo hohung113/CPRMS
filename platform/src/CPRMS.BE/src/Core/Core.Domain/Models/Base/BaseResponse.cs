@@ -1,7 +1,5 @@
 ﻿using Core.Utility.Enums;
 using Newtonsoft.Json;
-using System;
-using System.Runtime.Serialization;
 
 namespace Core.Domain.Models.Base
 {

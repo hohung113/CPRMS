@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Core.CPRMSServiceComponents.ServiceComponents.JWTService
+namespace Core.Api.ServiceComponents.JWTService
 {
     public class TokenService
     {

@@ -13,7 +13,8 @@ namespace Rms.Infrastructure.Modules.UserSystem.Repository
 
         public Task<User> GetUserByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            var userDetail = _rmsDbContext.Users.FirstOrDefault(x => x.Email == email  && !x.IsDeleted && !x.IsBlock);
+            return Task.FromResult(userDetail);
         }
     }
 }

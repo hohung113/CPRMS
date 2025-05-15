@@ -1,3 +1,10 @@
 ﻿global using Core.Api.Controller;
 global using MediatR;
 global using Microsoft.AspNetCore.Mvc;
+global using Core.Domain.Models.Base;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Options;
+global using Rms.Application.Common;
+global using Rms.Infrastructure.Persistence;
+global using Microsoft.AspNetCore.Authentication;
+global using Microsoft.AspNetCore.Authentication.Google;

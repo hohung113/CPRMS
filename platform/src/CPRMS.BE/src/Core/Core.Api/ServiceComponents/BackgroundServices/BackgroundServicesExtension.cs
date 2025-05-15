@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.CPRMSServiceComponents.ServiceComponents.BackgroundServices
+namespace Core.Api.ServiceComponents.BackgroundServices
 {
     internal class BackgroundServicesExtension
     {

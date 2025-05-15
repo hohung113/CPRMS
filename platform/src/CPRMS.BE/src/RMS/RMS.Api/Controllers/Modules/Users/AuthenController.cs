@@ -1,8 +1,5 @@
-﻿using Core.CPRMSServiceComponents.Controller;
-using Core.Domain.Models.Base;
-using Microsoft.EntityFrameworkCore;
-using Rms.Application.Modules.UserManagement.Command;
-using Rms.Infrastructure.Persistence;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net.Http.Headers;
 
 namespace Rms.API.Controllers.Modules.Users
 {
@@ -11,30 +8,52 @@ namespace Rms.API.Controllers.Modules.Users
         private readonly ILogger<AuthenController> _logger;
         private readonly RmsDbContext _rmsDbContext;
         private readonly IMediator _mediator;
+        private readonly AccountSettings _accountSettings;
+        private readonly IConfiguration _config;
+        private readonly RmsSystemConfig _rmsSystemConfig;
+
         public AuthenController(
             ILogger<AuthenController> logger,
             RmsDbContext rmsDbContext,
-            IMediator mediator
+            IMediator mediator,
+            IOptions<AccountSettings> options,
+            IOptions<RmsSystemConfig> rmsSystemConfig,
+            IConfiguration config
             )
         {
             _rmsDbContext = rmsDbContext;
             _logger = logger;
             _mediator = mediator;
+            _accountSettings = options.Value;
+            _rmsSystemConfig = rmsSystemConfig.Value;
+            _config = config;
         }
 
-        private string AppId => RouteData?.Values["appId"]?.ToString();
+        [HttpGet("google-login")]
+        public IActionResult GoogleLogin()
+        {
+            return Challenge(new AuthenticationProperties
+            {
+                RedirectUri = _rmsSystemConfig.OAuthSettings.GoogleCallbackUrl,
+            }, GoogleDefaults.AuthenticationScheme);
+        }
+        [HttpGet("google-callback")]
+        public async Task<IActionResult> GoogleCallback()
+        {
+            var authenticateResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            var authResult = await HttpContext.AuthenticateAsync();
+            var accessToken = authResult.Properties.GetTokenValue("access_token");
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            var response = await client.GetAsync("https://www.googleapis.com/oauth2/v2/userinfo");
+            var json = await response.Content.ReadAsStringAsync();
+            return Ok(json);
+        }
 
-        //[HttpPost("login")]
-        //public async Task<IActionResult> Login([FromBody] LoginCommand command)
-        //{
-        //    var isSuccess = await _mediator.Send(command);
-        //    if (isSuccess)
-        //        return Ok(new { Message = "Login successful" });
-        //    return Unauthorized(new { Message = "Invalid email or password" });
-        //}
         [HttpGet("getmemberofprojectCPRMS")]
         public async Task<BaseResponse<UserResponse>> GetName()
         {
+            var emailAdmin = _accountSettings.Admin.Email;
             var response = new UserResponse
             {
                 Name = "HungHPV - NhatNDA - TrieuLQ - QuyND - KhoaDD",
@@ -64,6 +83,14 @@ namespace Rms.API.Controllers.Modules.Users
 //    return Ok(result);
 //}
 
+        //[HttpPost("login")]
+        //public async Task<IActionResult> Login([FromBody] LoginCommand command)
+        //{
+        //    var isSuccess = await _mediator.Send(command);
+        //    if (isSuccess)
+        //        return Ok(new { Message = "Login successful" });
+        //    return Unauthorized(new { Message = "Invalid email or password" });
+        //}
 
 //[HttpGet("google-login")]
 //public IActionResult GoogleLogin()

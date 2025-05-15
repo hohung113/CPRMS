@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Core.CPRMSServiceComponents.ServiceComponents.Redis
+namespace Core.Api.ServiceComponents.Redis
 {
     internal class RedisContainerBuilderExtension
     {
