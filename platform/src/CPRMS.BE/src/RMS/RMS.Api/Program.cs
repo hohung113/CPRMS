@@ -1,10 +1,10 @@
 using Core.Api.MediatRCustom;
 using Core.Api.Middlewares;
-using Core.Application.ServiceModel;
-using Core.CPRMSServiceComponents.ServiceComponents.JWTService;
+using Core.Api.ServiceComponents.JWTService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.IdentityModel.Tokens;
+using Rms.Application.Common;
 using Rms.Infrastructure.Extensions;
 using System.Text;
 
@@ -30,6 +30,7 @@ public class Program
         builder.Services.AddScoped<TokenService>();
         builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.Configure<AccountSettings>(builder.Configuration.GetSection("Account"));
+        builder.Services.Configure<RmsSystemConfig>(builder.Configuration.GetSection("RmsSystem"));
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

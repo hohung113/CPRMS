@@ -16,7 +16,6 @@
     <Folder Include="Modules\Groups\" />
     <Folder Include="Modules\Documents\" />
     <Folder Include="Modules\UserManagement\IntegrationEventHandler\" />
-    <Folder Include="Modules\UserManagement\QueryHandler\" />
     <Folder Include="Modules\UserManagement\Validator\" />
   </ItemGroup>
 
