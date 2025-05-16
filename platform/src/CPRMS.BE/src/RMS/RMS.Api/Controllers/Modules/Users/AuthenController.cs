@@ -1,15 +1,25 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Amazon.Auth.AccessControlPolicy;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using Rms.Application.Modules.UserManagement.Dto;
+using Rms.Application.Modules.UserManagement.QueryHandler;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Security.Claims;
+using System.Text;
 
 namespace Rms.API.Controllers.Modules.Users
 {
     public class AuthenController : BaseControllerV1
     {
+        private readonly UserSystemQueryHandler _queryHandler;
         private readonly ILogger<AuthenController> _logger;
-        private readonly RmsDbContext _rmsDbContext;
         private readonly IMediator _mediator;
-        private readonly AccountSettings _accountSettings;
         private readonly IConfiguration _config;
+        private readonly RmsDbContext _rmsDbContext;
+        private readonly AccountSettings _accountSettings;
         private readonly RmsSystemConfig _rmsSystemConfig;
 
         public AuthenController(
@@ -18,6 +28,7 @@ namespace Rms.API.Controllers.Modules.Users
             IMediator mediator,
             IOptions<AccountSettings> options,
             IOptions<RmsSystemConfig> rmsSystemConfig,
+            UserSystemQueryHandler queryHandler,
             IConfiguration config
             )
         {
@@ -27,8 +38,16 @@ namespace Rms.API.Controllers.Modules.Users
             _accountSettings = options.Value;
             _rmsSystemConfig = rmsSystemConfig.Value;
             _config = config;
+            _queryHandler = queryHandler;
         }
 
+        #region Endpoint Write 
+
+
+
+        #endregion
+
+        #region Endpoint Read 
         [HttpGet("google-login")]
         public IActionResult GoogleLogin()
         {
@@ -37,18 +56,63 @@ namespace Rms.API.Controllers.Modules.Users
                 RedirectUri = _rmsSystemConfig.OAuthSettings.GoogleCallbackUrl,
             }, GoogleDefaults.AuthenticationScheme);
         }
+
+
         [HttpGet("google-callback")]
         public async Task<IActionResult> GoogleCallback()
         {
             var authenticateResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             var authResult = await HttpContext.AuthenticateAsync();
             var accessToken = authResult.Properties.GetTokenValue("access_token");
-            using var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-            var response = await client.GetAsync("https://www.googleapis.com/oauth2/v2/userinfo");
-            var json = await response.Content.ReadAsStringAsync();
-            return Ok(json);
+            var claims = authResult.Principal.Claims;
+            var principal = authResult.Principal;
+            var email = principal.FindFirstValue(ClaimTypes.Email);
+            // check in system , account admin , account user 
+            // account admin
+            GetGoogleUserDetailsQuery requestGmail = new GetGoogleUserDetailsQuery
+            {
+                Email = email,
+            };
+            var emailSystem = await _queryHandler.GetUserSystemByEmail(requestGmail);
+            //using var client = new HttpClient();
+            //client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            //var response = await client.GetAsync("https://www.googleapis.com/oauth2/v2/userinfo");
+            //var json = await response.Content.ReadAsStringAsync();
+
+            // Create JWT
+            var token = await GenerateJwtToken(emailSystem);
+            return Ok(new { token });
         }
+        private async Task<string> GenerateJwtToken(GoogleLoginResponseDto user)
+        {
+            var jwtSettings = _config.GetSection("Jwt");
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim("Email", user.Email),
+                new Claim("FullName", user.DisplayName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: jwtSettings["Issuer"],
+                audience: jwtSettings["Audience"],
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(2),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+        #endregion
+
+
+
+
 
         [HttpGet("getmemberofprojectCPRMS")]
         public async Task<BaseResponse<UserResponse>> GetName()

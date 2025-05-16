@@ -1,3 +1,4 @@
+using Autofac.Core;
 using Core.Api.MediatRCustom;
 using Core.Api.Middlewares;
 using Core.Api.ServiceComponents.JWTService;
@@ -5,7 +6,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.IdentityModel.Tokens;
 using Rms.Application.Common;
+using Rms.Application.Modules.UserManagement.QueryHandler;
+using Rms.Domain.Modules.UserSystem.Interface;
+using Rms.Domain.Repositories;
 using Rms.Infrastructure.Extensions;
+using Rms.Infrastructure.Modules.UserSystem.Repository;
+using Rms.Infrastructure.Repositories;
 using System.Text;
 
 public class Program
@@ -28,6 +34,8 @@ public class Program
         builder.Services.AddScoped<IDispatcher, Dispatcher>();
         builder.Services.AddSwaggerGen();
         builder.Services.AddScoped<TokenService>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<UserSystemQueryHandler>();
         builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.Configure<AccountSettings>(builder.Configuration.GetSection("Account"));
         builder.Services.Configure<RmsSystemConfig>(builder.Configuration.GetSection("RmsSystem"));
@@ -77,7 +85,10 @@ public class Program
         //    dbContext.Database.EnsureCreated();
         //}
 
-        app.UseSwagger();
+        app.UseSwagger(c =>
+        {
+            c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0;
+        });
         app.UseSwaggerUI();
         app.UseExceptionHandler("/error");
         app.UseMiddleware<TenantResolutionMiddleware>();
