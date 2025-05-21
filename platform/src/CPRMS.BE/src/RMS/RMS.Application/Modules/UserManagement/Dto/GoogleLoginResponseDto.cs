@@ -9,8 +9,9 @@ namespace Rms.Application.Modules.UserManagement.Dto
     public class GoogleLoginResponseDto
     {
         public string Email { get; set; }
-        public Guid UserId { get; set; }
+        public Guid? UserId { get; set; }
         public string DisplayName { get; set; }
+        public List<string> RoleNames { get; set; }
         public string AccessToken { get; set; }
 
     }

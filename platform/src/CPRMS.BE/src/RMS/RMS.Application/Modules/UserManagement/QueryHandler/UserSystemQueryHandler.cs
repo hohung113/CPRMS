@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Rms.Application.Common;
-
-namespace Rms.Application.Modules.UserManagement.QueryHandler
+﻿namespace Rms.Application.Modules.UserManagement.QueryHandler
 {
     public class UserSystemQueryHandler
     {
@@ -24,7 +21,8 @@ namespace Rms.Application.Modules.UserManagement.QueryHandler
             if(request.Email == _accountSettings.Admin.Email)
             {
                loginModelResponse.Email = request.Email;
-               loginModelResponse.DisplayName = "CprmsAdmin";
+               loginModelResponse.RoleNames = new List<String> { CprmsConstants.CprmsAdmin };
+               loginModelResponse.DisplayName = CprmsConstants.CprmsAdminDisplayName;
             }
             else
             {
