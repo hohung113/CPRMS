@@ -25,6 +25,7 @@ jobs:
 
       - name: Restore & Test Solution
         run: |
+          cd platform/src/CPRMS.BE
           dotnet restore CPRMS.BE.sln
           dotnet test CPRMS.BE.sln --no-build --verbosity normal
   build:
