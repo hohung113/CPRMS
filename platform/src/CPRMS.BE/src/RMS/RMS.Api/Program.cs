@@ -10,6 +10,11 @@ using Rms.Infrastructure.Extensions;
 using Rms.Infrastructure.Modules.UserSystem.Repository;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Mapster;
+using Rms.Application.Extensions;
+using Rms.Application.Modules.Acedamic.CommandHandler;
+using Autofac.Core;
+using Rms.Application.Modules.Acedamic.Validator;
 public class Program
 {
     public static void Main(string[] args)
@@ -34,12 +39,14 @@ public class Program
             options.LowercaseUrls = true;
             //options.LowercaseQueryStrings = true;
         });
+        // builder.Services.AddMapster(); 
         builder.Services.AddMediatR(cfg =>
         {
-            cfg.RegisterServicesFromAssembly(typeof(IDispatcher).Assembly);
-            //cfg.RegisterServicesFromAssembly(typeof().Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(CreateSemesterCommandHandler).Assembly);
         });
+  
         builder.Services.AddScoped<IDispatcher, Dispatcher>();
+        //builder.Services.AddMapster();
         builder.Services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo
@@ -91,9 +98,9 @@ public class Program
         });
 
         builder.Services.AddScoped<TokenService>();
-        builder.Services.AddScoped<IUserRepository, UserRepository>();
-        builder.Services.AddScoped<UserSystemQueryHandler>();
         builder.Services.AddInfrastructure(builder.Configuration);
+        builder.Services.AddApplication(builder.Configuration);
+
         builder.Services.Configure<AccountSettings>(builder.Configuration.GetSection("Account"));
         builder.Services.Configure<RmsSystemConfig>(builder.Configuration.GetSection("RmsSystem"));
         builder.Configuration
@@ -228,11 +235,12 @@ public class Program
             {
                 c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0;
             });
-            app.UseSwaggerUI(options =>
-            {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Rms.API v1");
-                // options.RoutePrefix = string.Empty;
-            });
+            app.UseSwaggerUI();
+            //app.UseSwaggerUI(options =>
+            //{
+            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Rms.API v1");
+            //    // options.RoutePrefix = string.Empty;
+            //});
         }
      
         app.UseExceptionHandler("/error");

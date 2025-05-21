@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 
 namespace Core.Infrastructure.Repositories
 {
-    public class BaseRepository<TContext, TEntity> : IDisposable, IBaseRepository<TContext, TEntity>
+    public class BaseRepository<TContext, TEntity> : IDisposable, IBaseRepository<TEntity>
         where TContext : DbContext
         where TEntity : BaseEntity
     {
