@@ -1,19 +1,14 @@
-using Autofac.Core;
-using Core.Api.MediatRCustom;
-using Core.Api.Middlewares;
+﻿using Core.Api.MediatRCustom;
 using Core.Api.ServiceComponents.JWTService;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Rms.Application.Common;
+using Microsoft.OpenApi.Models;
 using Rms.Application.Modules.UserManagement.QueryHandler;
 using Rms.Domain.Modules.UserSystem.Interface;
-using Rms.Domain.Repositories;
 using Rms.Infrastructure.Extensions;
 using Rms.Infrastructure.Modules.UserSystem.Repository;
-using Rms.Infrastructure.Repositories;
 using System.Text;
-
 public class Program
 {
     public static void Main(string[] args)
@@ -21,6 +16,17 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
+        var AllowAllCorsPolicy = "_allowAllCorsPolicy";
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: AllowAllCorsPolicy,
+                              policy =>
+                              {
+                                  policy.AllowAnyOrigin()
+                                        .AllowAnyMethod()
+                                        .AllowAnyHeader();
+                              });
+        });
         builder.Services.AddRouting(options =>
         {
             options.LowercaseUrls = true;
@@ -32,7 +38,56 @@ public class Program
             //cfg.RegisterServicesFromAssembly(typeof().Assembly);
         });
         builder.Services.AddScoped<IDispatcher, Dispatcher>();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "Rms.API",
+                Description = "API for the CPRMS system",
+                Contact = new OpenApiContact
+                {
+                    Name = "Contact with CPRMS Development",
+                    Email = "hunghpvde170589@fpt.edu.com",
+                    Url = new Uri("https://www.facebook.com/id130203")
+                },
+                // License = new OpenApiLicense
+                // {
+                //     Name = " MIT",
+                //     Url = new Uri("https://opensource.org/licenses/MIT")
+                // }
+            });
+
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "JWT Authorization header using the Bearer scheme. " +
+                                "Enter your token in the format: Bearer {token}. " +
+                                "Example: \"Bearer 12345abcdef\"",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"          
+            });
+
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        },
+                        Scheme = "oauth2",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header
+                    },
+                    new List<string>()
+                }
+            });
+        });
+
         builder.Services.AddScoped<TokenService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<UserSystemQueryHandler>();
@@ -45,37 +100,96 @@ public class Program
             .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
             .AddEnvironmentVariables();
         // Google - JWT - Cookie Config
+        //builder.Services.AddAuthentication(options =>
+        //{
+        //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //    //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        //    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        //    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //})
+        //.AddCookie()
+        //.AddGoogle(options =>
+        //{
+        //    options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? throw new InvalidOperationException("Google ClientId not configured.");
+        //    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? throw new InvalidOperationException("Google ClientSecret not configured.");
+        //    options.Scope.Add("email");
+        //    options.Scope.Add("profile");
+        //    //options.ClaimActions.MapJsonKey("urn:google:email", "email", "string");
+        //    options.SaveTokens = true;
+        //})
+        //.AddJwtBearer(options =>
+        //{
+        //    options.SaveToken = true;
+        //    options.RequireHttpsMetadata = builder.Environment.IsProduction(); // True cho production
+
+        //    options.TokenValidationParameters = new TokenValidationParameters
+        //    {
+        //        ValidateIssuer = true,
+        //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        //        ValidateAudience = true,
+        //        ValidAudience = builder.Configuration["Jwt:Audience"],
+        //        ValidateIssuerSigningKey = true,
+        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+        //        ValidateLifetime = true,
+        //        ClockSkew = TimeSpan.Zero
+        //    };
+        //});
         builder.Services.AddAuthentication(options =>
         {
-            options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            // Khi một [Authorize] attribute được sử dụng mà không chỉ định scheme,
+            // hãy cố gắng xác thực bằng JWT Bearer trước tiên.
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            // Nếu xác thực JWT thất bại cho một API và cần "challenge",
+            // hãy sử dụng challenge của JWT Bearer (thường trả về 401 Unauthorized).
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            // Đối với luồng đăng nhập Google (OAuth), khi Google xác thực xong và
+            // ứng dụng của bạn cần "đăng nhập" người dùng vào hệ thống (thường là qua cookie tạm thời),
+            // hãy sử dụng scheme Cookie.
             options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+
+            // Bạn có thể đặt DefaultScheme là JWT nếu phần lớn ứng dụng của bạn là API.
+            // Hoặc có thể bỏ qua nếu DefaultAuthenticateScheme và DefaultChallengeScheme đã rõ ràng.
+            // options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddCookie()
+        .AddCookie(options => {
+            options.Events.OnRedirectToLogin = context =>
+            {
+                if (context.Request.Path.StartsWithSegments("/api"))
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                }
+                context.Response.Redirect(context.RedirectUri);
+                return Task.CompletedTask;
+            };
+        })
         .AddGoogle(options =>
         {
             options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? throw new InvalidOperationException("Google ClientId not configured.");
             options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? throw new InvalidOperationException("Google ClientSecret not configured.");
             options.Scope.Add("email");
             options.Scope.Add("profile");
-            //options.ClaimActions.MapJsonKey("urn:google:email", "email", "string");
             options.SaveTokens = true;
         })
-        .AddJwtBearer(options =>
+        .AddJwtBearer(options => 
         {
+            options.SaveToken = true;
+            options.RequireHttpsMetadata = builder.Environment.IsProduction();
+
             options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
                 ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                ValidateAudience = true,
                 ValidAudience = builder.Configuration["Jwt:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured.")))
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
             };
         });
-
         builder.Services.AddAuthorization();
         var app = builder.Build();
         // Seed Db
@@ -84,17 +198,25 @@ public class Program
         //    var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
         //    dbContext.Database.EnsureCreated();
         //}
-
-        app.UseSwagger(c =>
+        if (app.Environment.IsDevelopment())
         {
-            c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0;
-        });
-        app.UseSwaggerUI();
+            app.UseSwagger(c =>
+            {
+                c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0;
+            });
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Rms.API v1");
+                // options.RoutePrefix = string.Empty;
+            });
+            //app.UseSwaggerUI();
+        }
+     
         app.UseExceptionHandler("/error");
-        app.UseMiddleware<TenantResolutionMiddleware>();
+        //app.UseMiddleware<TenantResolutionMiddleware>();
         app.UseHttpsRedirection();
         app.UseRouting();
-        app.UseCors("AllowAll");
+        app.UseCors(AllowAllCorsPolicy);
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();

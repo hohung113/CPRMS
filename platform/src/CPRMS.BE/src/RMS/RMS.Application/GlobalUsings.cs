@@ -3,3 +3,6 @@ global using System.Collections.Generic;
 global using System.Threading.Tasks;
 global using Rms.Application.Modules.UserManagement.Dto;
 global using Rms.Domain.Modules.UserSystem.Interface;
+global using Rms.Domain.Constants;
+global using Microsoft.Extensions.Options;
+global using Rms.Application.Common;
