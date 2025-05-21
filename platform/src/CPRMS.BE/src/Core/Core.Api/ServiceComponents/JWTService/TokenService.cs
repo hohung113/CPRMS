@@ -2,6 +2,7 @@
 using Core.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Rms.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -17,7 +18,7 @@ namespace Core.Api.ServiceComponents.JWTService
         {
             _configuration = configuration;
         }
-        public (string Token, DateTime ExpiresAt) GenerateAccessToken(User user)
+        public (string Token, DateTime ExpiresAt) GenerateAccessToken(UserSystem user)
         {
             var jwtKey = _configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured.");
             var issuer = _configuration["Jwt:Issuer"] ?? throw new InvalidOperationException("JWT Issuer not configured.");

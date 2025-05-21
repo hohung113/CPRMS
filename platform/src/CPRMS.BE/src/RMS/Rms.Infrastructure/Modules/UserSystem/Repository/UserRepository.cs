@@ -1,6 +1,5 @@
-﻿using Core.Domain.Entities;
-using Rms.Domain.Modules.UserSystem.Interface;
-
+﻿using Rms.Domain.Modules.UserSystem.Interface;
+using Rms.Domain.Entities;
 namespace Rms.Infrastructure.Modules.UserSystem.Repository
 {
     public class UserRepository : IUserRepository
@@ -11,9 +10,9 @@ namespace Rms.Infrastructure.Modules.UserSystem.Repository
             _rmsDbContext = dbContext;
         }
 
-        public Task<User> GetUserByEmailAsync(string email)
+        public Task<Rms.Domain.Entities.UserSystem> GetUserByEmailAsync(string email)
         {
-            var userDetail = _rmsDbContext.Users.FirstOrDefault(x => x.Email == email  && !x.IsDeleted && !x.IsBlock);
+            var userDetail = _rmsDbContext.UserSystems.FirstOrDefault(x => x.Email == email  && !x.IsDeleted && !x.IsBlock);
             return Task.FromResult(userDetail);
         }
     }
