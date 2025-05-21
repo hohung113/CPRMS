@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
-namespace Core.CPRMSServiceComponents.Controller
+namespace Core.Api.Controller
 {
     /*
         Run<T>(Func<Task<List<T>>>)  hỗ trợ trả về list.

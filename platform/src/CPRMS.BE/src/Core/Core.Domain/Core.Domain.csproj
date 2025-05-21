@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Core.Utility\Core.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Constants\" />
+  </ItemGroup>
+
 </Project>

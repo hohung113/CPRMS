@@ -25,20 +25,8 @@ namespace Core.Domain.Models.Enums
         Lecture = 1000,
         Student = 1001,
     }
-    public enum Profession
-    {
-        InformationTechnology = 1000,
-       // Business = 1001,
-    }
-    public enum Speciality
-    {
-        SoftwareEngineer = 1000,
-        ArtificialIntelligence = 1001,
-        GraphicDesign = 1002,
-        //Marketing = 2000,
-        //InternationalBusiness = 2001,
-        //BusinessAdministration = 2002
-    }
+ 
+
     public enum ProjectType
     {
         Website = 1000,

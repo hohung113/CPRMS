@@ -17,7 +17,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 
-//namespace Core.CPRMSServiceComponents.Middlewares
+//namespace Core.Api.Middlewares
 //{
 //    public class GlobalExceptionHandlerMiddleware
 //    {

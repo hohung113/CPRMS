@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Rms.Application.Common
+﻿namespace Rms.Application.Common
 {
     public class PagedResult<T>
     {

@@ -1,4 +1,4 @@
-﻿using Core.CPRMSServiceComponents.Controller;
+﻿using Core.Api.Controller;
 using Core.Domain.Models.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

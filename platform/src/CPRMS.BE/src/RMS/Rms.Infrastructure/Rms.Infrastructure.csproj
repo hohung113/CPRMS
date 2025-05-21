@@ -15,6 +15,7 @@
     <Folder Include="Modules\UserSystem\Specification\" />
     <Folder Include="Modules\UserSystem\Service\" />
     <Folder Include="Modules\UserSystem\Query\" />
+    <Folder Include="Repositories\" />
     <Folder Include="Storage\" />
   </ItemGroup>
 

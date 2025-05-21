@@ -1,6 +1,7 @@
-﻿using Core.Domain.Entities;
+﻿using Core.Domain.Models.Enums;
 using Core.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Rms.Domain.Entities;
 using System.Reflection;
 
 namespace Rms.Infrastructure.Persistence
@@ -10,10 +11,13 @@ namespace Rms.Infrastructure.Persistence
         public RmsDbContext(DbContextOptions<RmsDbContext> options) : base(options)
         {
         }
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserSystem> UserSystems { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<Curriculumn> Curriculumns { get; set; }
+        public DbSet<Profession> Professions { get; set; }
+        public DbSet<Semester> Semesters { get; set; }
+        public DbSet<Speciality> Specialities { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

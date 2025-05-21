@@ -7,8 +7,7 @@ COPY ["tests", "./tests"]
 COPY ["src", "./src"]
 
 # Restore and publish
-# RUN dotnet restore "CPRMS.BE.sln"
-RUN dotnet build "CPRMS.BE.sln"
+RUN dotnet restore "CPRMS.BE.sln"
 RUN dotnet publish "CPRMS.BE.sln" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
