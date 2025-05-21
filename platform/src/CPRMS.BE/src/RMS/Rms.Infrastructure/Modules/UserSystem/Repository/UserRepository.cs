@@ -1,6 +1,4 @@
-﻿using Rms.Domain.Modules.UserSystem.Interface;
-using Rms.Domain.Entities;
-namespace Rms.Infrastructure.Modules.UserSystem.Repository
+﻿namespace Rms.Infrastructure.Modules.UserSystem.Repository
 {
     public class UserRepository : IUserRepository
     {

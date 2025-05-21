@@ -1,6 +1,12 @@
-﻿namespace Rms.Domain.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Rms.Application.Modules.Acedamic.Dto
 {
-    public class Semester : BaseEntity
+    public class SemesterDto
     {
         public string Name { get; set; }
         public string? Description { get; set; }

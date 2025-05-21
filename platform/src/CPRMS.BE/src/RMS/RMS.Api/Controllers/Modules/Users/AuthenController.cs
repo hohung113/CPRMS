@@ -154,7 +154,7 @@ namespace Rms.API.Controllers.Modules.Users
             };
             return await this.Run<UserResponse>(_logger, async () => response);
         }
-        [Authorize(Roles ="Admin")]
+        //[Authorize(Roles ="Admin")]
         [HttpGet("GetRoleName")]
         public async Task<IActionResult> GetRoleName()
         {

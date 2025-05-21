@@ -4,7 +4,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Core.Domain.Interfaces
 {
-    public interface IBaseRepository<TContext, TEntity>
+    public interface IBaseRepository<TEntity> where TEntity : class
     {
         public Task<List<TEntity>> GetEntities();
         public Task<TEntity?> GetEntity(Guid id);

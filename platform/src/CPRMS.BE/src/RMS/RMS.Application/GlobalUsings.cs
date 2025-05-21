@@ -6,3 +6,6 @@ global using Rms.Domain.Modules.UserSystem.Interface;
 global using Rms.Domain.Constants;
 global using Microsoft.Extensions.Options;
 global using Rms.Application.Common;
+global using Core.Api.MediatRCustom;
+global using Rms.Application.Modules.Acedamic.Dto;
+global using Mapster;
