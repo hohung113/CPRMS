@@ -9,11 +9,13 @@ using Rms.Domain.Modules.UserSystem.Interface;
 using Rms.Infrastructure.Extensions;
 using Rms.Infrastructure.Modules.UserSystem.Repository;
 using System.Text;
+using Microsoft.Extensions.Logging;
 public class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         var AllowAllCorsPolicy = "_allowAllCorsPolicy";
@@ -192,12 +194,34 @@ public class Program
         });
         builder.Services.AddAuthorization();
         var app = builder.Build();
-        // Seed Db
-        //using (var scope = app.Services.CreateScope())
-        //{
-        //    var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-        //    dbContext.Database.EnsureCreated();
-        //}
+        // Seed Db & Auto migration data
+        using (var scope = app.Services.CreateScope())
+        {
+            var services = scope.ServiceProvider;
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            try
+            {
+                var dbContext = services.GetRequiredService<RmsDbContext>();
+                logger.LogInformation("Checking for pending migrations...");
+                var pendingMigrations = dbContext.Database.GetPendingMigrations();
+
+                if (pendingMigrations.Any())
+                {
+
+                    logger.LogInformation("Found {PendingMigrationsCount} pending migration(s). Applying...", pendingMigrations.Count());
+                    dbContext.Database.Migrate();
+                    logger.LogInformation("Database migrations applied successfully.");
+                }
+                else
+                {
+                    logger.LogInformation("Database is up to date. No pending migrations.");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while migrating the database at startup.");
+            }
+        }
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger(c =>
@@ -209,7 +233,6 @@ public class Program
                 options.SwaggerEndpoint("/swagger/v1/swagger.json", "Rms.API v1");
                 // options.RoutePrefix = string.Empty;
             });
-            //app.UseSwaggerUI();
         }
      
         app.UseExceptionHandler("/error");

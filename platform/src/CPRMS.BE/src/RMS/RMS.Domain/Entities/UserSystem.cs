@@ -1,7 +1,4 @@
-﻿using Core.Domain.Entities;
-using Rms.Domain.Enums;
-
-namespace Rms.Domain.Entities
+﻿namespace Rms.Domain.Entities
 {
     public class UserSystem : BaseEntity
     {
@@ -11,6 +8,11 @@ namespace Rms.Domain.Entities
         public Campus Campus { get; set; }
         public bool IsBlock { get; set; }
         public string ProfileImage { get; set; }
-        public Guid? CurriculumnId { get; set; }
+        public string? CurriculumName { get; set; }
+        public Guid? SpecialityId { get; set; } // ex : Software Enginner
+        public Guid SemesterId { get; set; }
+        public virtual Speciality? Speciality { get; set; }
+        public virtual Semester? Semester { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }

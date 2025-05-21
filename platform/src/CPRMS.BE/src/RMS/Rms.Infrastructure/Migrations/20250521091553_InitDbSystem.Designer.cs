@@ -11,8 +11,8 @@ using Rms.Infrastructure.Persistence;
 namespace Rms.Infrastructure.Migrations
 {
     [DbContext(typeof(RmsDbContext))]
-    [Migration("20250514142204_InitUserSystem")]
-    partial class InitUserSystem
+    [Migration("20250521091553_InitDbSystem")]
+    partial class InitDbSystem
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,20 +22,21 @@ namespace Rms.Infrastructure.Migrations
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Core.Domain.Entities.Curriculumn", b =>
+            modelBuilder.Entity("Rms.Domain.Entities.Profession", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
@@ -57,10 +58,10 @@ namespace Rms.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Curriculumns");
+                    b.ToTable("Professions");
                 });
 
-            modelBuilder.Entity("Core.Domain.Entities.Role", b =>
+            modelBuilder.Entity("Rms.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,6 +72,9 @@ namespace Rms.Infrastructure.Migrations
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
@@ -163,18 +167,11 @@ namespace Rms.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Core.Domain.Entities.User", b =>
+            modelBuilder.Entity("Rms.Domain.Entities.Semester", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
-
-                    b.Property<int>("Campus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetime(6)");
@@ -182,19 +179,11 @@ namespace Rms.Infrastructure.Migrations
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CurriculumnId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
+                    b.Property<string>("Description")
                         .HasColumnType("longtext");
 
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("IsBlock")
-                        .HasColumnType("tinyint(1)");
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
@@ -205,7 +194,7 @@ namespace Rms.Infrastructure.Migrations
                     b.Property<Guid>("LastModifiedBy")
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("ProfileImage")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -214,12 +203,55 @@ namespace Rms.Infrastructure.Migrations
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("timestamp(6)");
 
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Semesters");
                 });
 
-            modelBuilder.Entity("Core.Domain.Entities.UserRole", b =>
+            modelBuilder.Entity("Rms.Domain.Entities.Speciality", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("ProfessionId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProfessionId");
+
+                    b.ToTable("Specialities");
+                });
+
+            modelBuilder.Entity("Rms.Domain.Entities.UserRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -253,7 +285,144 @@ namespace Rms.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("Rms.Domain.Entities.UserSystem", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Campus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CurriculumName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsBlock")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<DateTimeOffset>("LastModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("LastModifiedBy")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("ProfileImage")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("timestamp(6)");
+
+                    b.Property<Guid>("SemesterId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("SpecialityId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SemesterId");
+
+                    b.HasIndex("SpecialityId");
+
+                    b.ToTable("UserSystems");
+                });
+
+            modelBuilder.Entity("Rms.Domain.Entities.Speciality", b =>
+                {
+                    b.HasOne("Rms.Domain.Entities.Profession", "Profession")
+                        .WithMany("Specialities")
+                        .HasForeignKey("ProfessionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Profession");
+                });
+
+            modelBuilder.Entity("Rms.Domain.Entities.UserRole", b =>
+                {
+                    b.HasOne("Rms.Domain.Entities.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Rms.Domain.Entities.UserSystem", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Rms.Domain.Entities.UserSystem", b =>
+                {
+                    b.HasOne("Rms.Domain.Entities.Semester", "Semester")
+                        .WithMany()
+                        .HasForeignKey("SemesterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Rms.Domain.Entities.Speciality", "Speciality")
+                        .WithMany("UserSystems")
+                        .HasForeignKey("SpecialityId");
+
+                    b.Navigation("Semester");
+
+                    b.Navigation("Speciality");
+                });
+
+            modelBuilder.Entity("Rms.Domain.Entities.Profession", b =>
+                {
+                    b.Navigation("Specialities");
+                });
+
+            modelBuilder.Entity("Rms.Domain.Entities.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Rms.Domain.Entities.Speciality", b =>
+                {
+                    b.Navigation("UserSystems");
+                });
+
+            modelBuilder.Entity("Rms.Domain.Entities.UserSystem", b =>
+                {
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

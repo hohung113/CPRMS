@@ -1,9 +1,9 @@
-﻿using Core.Domain.Entities;
+﻿using Rms.Domain.Entities;
 
 namespace Rms.Domain.Modules.UserSystem.Interface
 {
     public interface IUserRepository
     {
-        Task<User> GetUserByEmailAsync(string email);
+        Task<Rms.Domain.Entities.UserSystem> GetUserByEmailAsync(string email);
     }
 }

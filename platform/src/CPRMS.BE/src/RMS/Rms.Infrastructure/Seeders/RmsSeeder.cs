@@ -1,5 +1,5 @@
-﻿using Core.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Rms.Domain.Entities;
 using Rms.Infrastructure.Persistence;
 using System;
 using System.Collections.Generic;

@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Rms.API.Controllers.Modules.Users
 {
-    public class AuthenController : BaseControllerV1
+    public class AuthenController : BaseControllerV1 
     {
         private readonly UserSystemQueryHandler _queryHandler;
         private readonly ILogger<AuthenController> _logger;
