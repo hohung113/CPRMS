@@ -11,6 +11,7 @@ using Rms.Application.Modules.Acedamic.CommandHandler;
 using Rms.Infrastructure.Extensions;
 using System.Text;
 using Rms.Application.Modules.UserManagement.CommandHandler;
+using Rms.API.Middlewares;
 public class Program
 {
     public static void Main(string[] args)

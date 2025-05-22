@@ -5,7 +5,9 @@ using Rms.Application.Modules.UserManagement.Command;
 using Rms.Application.Modules.UserManagement.Dto;
 using Rms.Application.Modules.UserManagement.QueryHandler;
 using Rms.Domain.Constants;
+using Rms.Domain.Context;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net.WebSockets;
 using System.Security.Claims;
 using System.Text;
 
@@ -109,11 +111,11 @@ namespace Rms.API.Controllers.Modules.Users
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                //new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.FullName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             if (user.RoleNames != null)
             {
@@ -157,6 +159,8 @@ namespace Rms.API.Controllers.Modules.Users
         [HttpGet("GetRoleName")]
         public async Task<IActionResult> GetRoleName()
         {
+            var userId = CurrentUserId;
+            var name = CPRMSHttpContext.Get(HttpContext).UserName;
             var roleName = await _rmsDbContext.Roles.Where(x => x.IsDeleted == false).Select(x => x.RoleName).ToListAsync();
             return Ok(roleName);
         }
