@@ -30,7 +30,7 @@ namespace Rms.API.Controllers.Modules.Academic
         public async Task<IActionResult> UpdateProfession([FromRoute] Guid id, [FromBody] UpdateProfessionCommand command)
         {
             command.Id = id;
-            command.LastModifiedBy = Guid.Empty;
+            command.LastModifiedBy = Guid.Parse(CurrentUserId);
             await Dispatcher.Send(command);
             return NoContent();
         }
