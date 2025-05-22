@@ -16,5 +16,6 @@ namespace Rms.Application.Modules.Acedamic.Profession.Queries.GellAllProfessions
             var prodessionDto = result.Adapt<List<ProfessionDto>>();
             return prodessionDto;
         }
+        // CRUD
     }
 }
