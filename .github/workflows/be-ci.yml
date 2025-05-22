@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Run Automated Tests
+    name: Run Build And Automated Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -35,7 +35,3 @@ jobs:
         run: |
           cd platform/src/CPRMS.BE
           docker build -t quynd17/cprms-be .
-
-      - name: Push Docker image
-        run: |
-          docker push quynd17/cprms-be
