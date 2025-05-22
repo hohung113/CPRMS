@@ -1,6 +1,10 @@
 ﻿using Autofac.Core;
+using FluentValidation.AspNetCore;
+using FluentValidation;
+using Mapster;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Rms.Application.Modules.Acedamic.Profession.Queries.GellAllProfessions;
 using Rms.Application.Modules.Acedamic.QueryHandler;
 using Rms.Application.Modules.Acedamic.Validator;
 using Rms.Application.Modules.UserManagement.QueryHandler;
@@ -22,10 +26,16 @@ namespace Rms.Application.Extensions
         {
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISemesterRepository, SemesterRepository>();
-            
+            services.AddScoped<IProfessionRepository, ProfessionRepository>();
+
+
             services.AddScoped<UserSystemQueryHandler>();
             services.AddScoped<SemesterQueryHandler>();
+            services.AddScoped<GetAllProfessionsQueryHandler>();
             services.AddMapster();
+
+            services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
+            services.AddFluentValidationAutoValidation();
         }
     }
 }
