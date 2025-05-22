@@ -5,14 +5,17 @@ WORKDIR /app
 COPY ["CPRMS.BE.sln", "./"]
 COPY ["tests", "./tests"]
 COPY ["src", "./src"]
+ENV ASPNETCORE_ENVIRONMENT=Development 
 
-# Restore and publish
+# Restore, build and then testing all in docker
 RUN dotnet restore "CPRMS.BE.sln"
+RUN dotnet test "CPRMS.BE.sln" --no-restore
+#Publish 
 RUN dotnet publish "CPRMS.BE.sln" -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-EXPOSE 80
+EXPOSE 8080
 EXPOSE 443
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "Rms.API.dll"]
