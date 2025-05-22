@@ -284,10 +284,6 @@ namespace Core.Infrastructure.Repositories
                 throw new InvalidOperationException("Entity ID must not be empty.");
             }
         }
-        //public virtual async Task<TEntity?> GetEntity(Guid id)
-        //{
-        //    return await _context.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
-        //}
 
         public virtual async Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
         {
