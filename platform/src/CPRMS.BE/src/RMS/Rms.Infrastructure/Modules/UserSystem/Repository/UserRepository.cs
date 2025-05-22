@@ -1,9 +1,9 @@
 ﻿namespace Rms.Infrastructure.Modules.UserSystem.Repository
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<RmsDbContext, Rms.Domain.Entities.UserSystem>, IUserRepository
     {
         private readonly RmsDbContext _rmsDbContext;
-        public UserRepository(RmsDbContext dbContext)
+        public UserRepository(RmsDbContext dbContext) : base(dbContext)
         {
             _rmsDbContext = dbContext;
         }

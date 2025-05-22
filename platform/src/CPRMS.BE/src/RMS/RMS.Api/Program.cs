@@ -10,6 +10,10 @@ using Rms.Application.Extensions;
 using Rms.Application.Modules.Acedamic.CommandHandler;
 using Rms.Infrastructure.Extensions;
 using System.Text;
+using Autofac.Core;
+using Rms.Application.Modules.Acedamic.Validator;
+using Core.Api.Middlewares;
+using Rms.Application.Modules.UserManagement.CommandHandler;
 public class Program
 {
     public static void Main(string[] args)
@@ -38,6 +42,7 @@ public class Program
         builder.Services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(CreateSemesterCommandHandler).Assembly);
+            cfg.RegisterServicesFromAssembly(typeof(CreateUserCommandHandler).Assembly);
         });
   
         builder.Services.AddScoped<IDispatcher, Dispatcher>();

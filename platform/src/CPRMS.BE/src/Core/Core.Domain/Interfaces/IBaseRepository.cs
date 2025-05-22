@@ -1,6 +1,7 @@
 ﻿using Core.Domain.Models.Base;
 using Core.Domain.Query;
 using Microsoft.Data.SqlClient;
+using System.Linq.Expressions;
 
 namespace Core.Domain.Interfaces
 {
@@ -16,5 +17,7 @@ namespace Core.Domain.Interfaces
         public Task<Boolean> DeleteEntity(TEntity entity);
         public Task<Boolean> DeleteEntities(List<TEntity> entities);
         public Task<BaseDataCollection<TEntity>> QueryEntities(PageModel page);
+        public Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
+        public Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }

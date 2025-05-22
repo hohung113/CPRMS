@@ -1,15 +1,12 @@
-﻿using Amazon.Auth.AccessControlPolicy;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Rms.Application.Modules.UserManagement.Command;
 using Rms.Application.Modules.UserManagement.Dto;
 using Rms.Application.Modules.UserManagement.QueryHandler;
 using Rms.Domain.Constants;
 using Rms.Domain.Context;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 
@@ -44,13 +41,6 @@ namespace Rms.API.Controllers.Modules.Users
             _queryHandler = queryHandler;
         }
 
-        #region Endpoint Write 
-
-
-
-        #endregion
-
-        #region Endpoint Read 
         [HttpGet("google-login")]
         public IActionResult GoogleLogin()
         {
@@ -83,6 +73,16 @@ namespace Rms.API.Controllers.Modules.Users
             }
             try
             {
+                if (userSystemInfor.Email == _accountSettings.Admin.Email) {
+                   // Create Admin Account
+                    CreateUserCommand command = new CreateUserCommand
+                    {
+                        Code = CprmsConstants.CprmsAdmin,
+                        Email = _accountSettings.Admin.Email,
+                        FullName = CprmsConstants.CprmsAdminDisplayName,
+                    };
+                    var result = await Dispatcher.Send(command);
+                }
                 var token = await GenerateJwtToken(userSystemInfor);
                 return Ok(new { token });
             }
@@ -107,7 +107,6 @@ namespace Rms.API.Controllers.Modules.Users
             }
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
 
             var claims = new List<Claim>
             {
@@ -143,9 +142,8 @@ namespace Rms.API.Controllers.Modules.Users
 
             return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
         }
-        #endregion
 
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Student")]
         [HttpGet("getmemberofprojectCPRMS")]
         public async Task<BaseResponse<UserResponse>> GetName()
         {
