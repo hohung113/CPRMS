@@ -284,5 +284,33 @@ namespace Core.Infrastructure.Repositories
                 throw new InvalidOperationException("Entity ID must not be empty.");
             }
         }
+        //public virtual async Task<TEntity?> GetEntity(Guid id)
+        //{
+        //    return await _context.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
+        //}
+
+        public virtual async Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+            var parameter = Expression.Parameter(typeof(TEntity), "e");
+            var isDeletedProperty = Expression.Property(parameter, "IsDeleted");
+            var notDeleted = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+            var body = Expression.AndAlso(notDeleted, Expression.Invoke(predicate, parameter));
+            var finalPredicate = Expression.Lambda<Func<TEntity, bool>>(body, parameter);
+
+            return await _context.Set<TEntity>().Where(finalPredicate).ToListAsync();
+        }
+
+        public virtual async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            if (predicate == null)
+            {
+                throw new ArgumentNullException(nameof(predicate));
+            }
+            return await _context.Set<TEntity>().Where(e => !e.IsDeleted).FirstOrDefaultAsync(predicate);
+        }
     }
 }

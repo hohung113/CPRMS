@@ -22,7 +22,7 @@ namespace Rms.Application.Modules.UserManagement.QueryHandler
             {
                 UserId = user.Id,
                 Email = user.Email,
-                DisplayName = user.FullName,
+                FullName = user.FullName,
             };
         }
     }
