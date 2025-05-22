@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Rms.Application.Modules.Acedamic.Command;
+﻿using Rms.Application.Modules.Acedamic.Command;
 using Rms.Application.Modules.Acedamic.QueryHandler;
 
 namespace Rms.API.Controllers.Modules.Academic
@@ -15,10 +14,6 @@ namespace Rms.API.Controllers.Modules.Academic
         [HttpPost]
         public async Task<IActionResult> CreateSemester([FromBody] CreateSemesterCommand command)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
             var result = await Dispatcher.Send(command);
             return Ok(result);
             //return CreatedAtAction(nameof(GetSemesterById), new { id = result.Id }, result); // Example, you'd need a GetSemesterById endpoint

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Rms.Infrastructure.Persistence;
 
@@ -10,9 +11,11 @@ using Rms.Infrastructure.Persistence;
 namespace Rms.Infrastructure.Migrations
 {
     [DbContext(typeof(RmsDbContext))]
-    partial class RmsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250522042335_updateUserTable")]
+    partial class updateUserTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
