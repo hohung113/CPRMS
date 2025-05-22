@@ -14,7 +14,6 @@ namespace Rms.Application.Modules.Acedamic.Profession.Commands.CreateProfession
             RuleFor(dto => dto.Code)
                 .NotEmpty().WithMessage("Profession name must not be empty.")
                 .MaximumLength(100).WithMessage("Profession name must not exceed 100 characters.");
-
         }
     }
 }
