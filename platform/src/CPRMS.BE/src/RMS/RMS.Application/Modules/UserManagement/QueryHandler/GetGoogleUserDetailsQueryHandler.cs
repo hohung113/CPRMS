@@ -20,9 +20,9 @@ namespace Rms.Application.Modules.UserManagement.QueryHandler
 
             return new GoogleLoginResponseDto
             {
-                UserId = user.Id,
+                Id = user.Id,
                 Email = user.Email,
-                DisplayName = user.FullName,
+                FullName = user.FullName,
             };
         }
     }

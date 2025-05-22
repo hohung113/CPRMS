@@ -39,7 +39,7 @@ namespace Core.Infrastructure.Repositories
             this._func = func;
         }
         public BaseRepository(TContext dbContext)
-        {
+            {
             _context = dbContext;
         }
 

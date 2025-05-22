@@ -6,6 +6,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Rms.Application.Modules.UserManagement.Dto;
 using Rms.Application.Modules.UserManagement.QueryHandler;
+using Rms.Domain.Constants;
+using Rms.Domain.Context;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -109,11 +111,11 @@ namespace Rms.API.Controllers.Modules.Users
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.DisplayName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) // JWT ID, giúp tránh tấn công replay
-                // new Claim("user_id", user.Id)
+                new Claim(ClaimTypes.Name, user.FullName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                //new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                //new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()),
             };
             if (user.RoleNames != null)
             {
@@ -158,6 +160,7 @@ namespace Rms.API.Controllers.Modules.Users
         [HttpGet("GetRoleName")]
         public async Task<IActionResult> GetRoleName()
         {
+            //var currentUserId = CPRMSHttpContext.Get(HttpContext).UserId;
             var roleName = await _rmsDbContext.Roles.Where(x => x.IsDeleted == false).Select(x => x.RoleName).ToListAsync();
             return Ok(roleName);
         }

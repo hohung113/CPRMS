@@ -1,8 +1,6 @@
 ﻿using Core.Api.MediatRCustom;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using System.Security.Claims;
 
 namespace Core.Api.Controller
 {
@@ -13,6 +11,6 @@ namespace Core.Api.Controller
     {
         private IDispatcher _dispatcher;
         protected IDispatcher Dispatcher => _dispatcher ??= HttpContext.RequestServices.GetRequiredService<IDispatcher>();
-        protected string CurrentUserId => User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        //protected string CurrentUserId => User?.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

@@ -1,21 +1,15 @@
 ﻿using Core.Api.MediatRCustom;
+using Core.Api.Middlewares;
 using Core.Api.ServiceComponents.JWTService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Rms.Application.Modules.UserManagement.QueryHandler;
-using Rms.Domain.Modules.UserSystem.Interface;
-using Rms.Infrastructure.Extensions;
-using Rms.Infrastructure.Modules.UserSystem.Repository;
-using System.Text;
-using Microsoft.Extensions.Logging;
-using Mapster;
+using Rms.API.Middlewares;
 using Rms.Application.Extensions;
 using Rms.Application.Modules.Acedamic.CommandHandler;
-using Autofac.Core;
-using Rms.Application.Modules.Acedamic.Validator;
-using Core.Api.Middlewares;
+using Rms.Infrastructure.Extensions;
+using System.Text;
 public class Program
 {
     public static void Main(string[] args)
@@ -101,7 +95,7 @@ public class Program
         builder.Services.AddScoped<TokenService>();
         builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.AddApplication(builder.Configuration);
-
+        builder.Services.AddHttpContextAccessor();
         builder.Services.Configure<AccountSettings>(builder.Configuration.GetSection("Account"));
         builder.Services.Configure<RmsSystemConfig>(builder.Configuration.GetSection("RmsSystem"));
         builder.Configuration
@@ -247,6 +241,7 @@ public class Program
         app.UseExceptionHandler("/error");
         //app.UseMiddleware<TenantResolutionMiddleware>();
         app.UseMiddleware<ExceptionHandlingMiddleware>();
+        app.UseMiddleware<JwtAuthenticationMiddleware>();
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseCors(AllowAllCorsPolicy);
