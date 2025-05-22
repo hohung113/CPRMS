@@ -15,6 +15,7 @@ using Rms.Application.Extensions;
 using Rms.Application.Modules.Acedamic.CommandHandler;
 using Autofac.Core;
 using Rms.Application.Modules.Acedamic.Validator;
+using Core.Api.Middlewares;
 public class Program
 {
     public static void Main(string[] args)
@@ -245,6 +246,7 @@ public class Program
      
         app.UseExceptionHandler("/error");
         //app.UseMiddleware<TenantResolutionMiddleware>();
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseCors(AllowAllCorsPolicy);

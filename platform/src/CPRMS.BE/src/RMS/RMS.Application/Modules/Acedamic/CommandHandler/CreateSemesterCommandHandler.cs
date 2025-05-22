@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using MediatR;
 using Rms.Application.Modules.Acedamic.Command;
+using Rms.Application.Modules.Acedamic.Dto;
 using Rms.Domain.Entities;
 using Rms.Domain.Modules.Academic.Interface;
 
