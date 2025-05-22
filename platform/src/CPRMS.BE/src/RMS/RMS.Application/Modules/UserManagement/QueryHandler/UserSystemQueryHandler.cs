@@ -22,7 +22,7 @@
             {
                loginModelResponse.Email = request.Email;
                loginModelResponse.RoleNames = new List<String> { CprmsConstants.CprmsAdmin };
-               loginModelResponse.DisplayName = CprmsConstants.CprmsAdminDisplayName;
+               loginModelResponse.FullName = CprmsConstants.CprmsAdminDisplayName;
             }
             else
             {
@@ -32,8 +32,8 @@
                     throw new InvalidOperationException("User not found with the provided email.");
                 }
                 loginModelResponse.Email = user.Email;
-                loginModelResponse.UserId = user.Id;
-                loginModelResponse.DisplayName = user.FullName;
+                loginModelResponse.Id = user.Id;
+                loginModelResponse.FullName = user.FullName;
             }
             return loginModelResponse;
         }
