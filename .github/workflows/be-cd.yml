@@ -1,9 +1,8 @@
-name: Build and Deploy on Tag
+name: Build and Deploy on Release
 
 on:
-  push:
-    tags:
-      - 'release__*'
+  release:
+    types: [published, edited]
 
 env:
   IMAGE_NAME: quynd17/cprms-be
