@@ -21,7 +21,7 @@ namespace Core.Infrastructure.Repositories
             get
             {
                 var userId = CPRMSHttpContext.UserId;
-                return Guid.Parse(userId);
+                return Guid.TryParse(userId, out var guid) ? guid : Guid.Empty;
             }
         }
 
