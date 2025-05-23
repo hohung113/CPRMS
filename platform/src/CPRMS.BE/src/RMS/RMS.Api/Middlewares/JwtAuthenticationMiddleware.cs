@@ -37,10 +37,6 @@ namespace Rms.API.Middlewares
                 _logger.LogError(ex, "Error in JWT Authentication Middleware");
                 await _next(context);
             }
-            finally
-            {
-                CPRMSHttpContext.Clear();
-            }
         }
 
         private string? ExtractTokenFromHeader(HttpContext context)
