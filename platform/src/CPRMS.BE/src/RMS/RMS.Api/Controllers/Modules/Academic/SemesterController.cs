@@ -17,12 +17,11 @@ namespace Rms.API.Controllers.Modules.Academic
         }
 
         [HttpPost("createsemester")]
-        public async Task<IActionResult> CreateSemester([FromBody] SemesterDto request)
+        public async Task<Guid?> CreateSemester([FromBody] SemesterDto request)
         {
             var cmd = request.Adapt<CreateSemesterCommand>();
             var result = await Dispatcher.Send(cmd);
-            return Ok(result);
-            //return CreatedAtAction(nameof(GetSemesterById), new { id = result.Id }, result);
+            return result.Id;
         }
         #region For Page Return Only item and count
         [HttpGet("GetAllSemesters")]
