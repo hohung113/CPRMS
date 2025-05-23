@@ -1,32 +1,41 @@
-﻿namespace Rms.Domain.Context
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Rms.Domain.Context
 {
     public static class CPRMSHttpContext
     {
-        private static readonly AsyncLocal<CPRMSHttpContent?> _current = new();
+        private static IHttpContextAccessor? _httpContextAccessor;
 
-        public static CPRMSHttpContent? Current
+        public static void Configure(IHttpContextAccessor accessor)
         {
-            get => _current.Value;
-            set => _current.Value = value;
+            _httpContextAccessor = accessor;
         }
-        public static string? UserId => Current?.UserId;
-        public static string? UserName => Current?.UserName;
-        public static string? RoleName => Current?.RoleName;
-        public static bool IsAuthenticated => Current?.IsAuthenticated ?? false;
+
+        private static HttpContext? HttpContext => _httpContextAccessor?.HttpContext;
+
+        public static string? UserId => HttpContext?.Items["UserId"] as string;
+        public static string? UserName => HttpContext?.Items["UserName"] as string;
+        public static string? RoleName => HttpContext?.Items["RoleName"] as string;
+        public static bool IsAuthenticated => !string.IsNullOrEmpty(UserId);
+
         public static void SetCurrentUser(string? userId, string? userName, string? roleName)
         {
-            Current = new CPRMSHttpContent
-            {
-                UserId = userId,
-                UserName = userName,
-                RoleName = roleName
-            };
+            if (HttpContext == null) return;
+
+            HttpContext.Items["UserId"] = userId;
+            HttpContext.Items["UserName"] = userName;
+            HttpContext.Items["RoleName"] = roleName;
         }
 
         public static void Clear()
         {
-            Current = null;
+            if (HttpContext == null) return;
+
+            HttpContext.Items.Remove("UserId");
+            HttpContext.Items.Remove("UserName");
+            HttpContext.Items.Remove("RoleName");
         }
+
         public static bool IsInRole(string role)
         {
             return string.Equals(RoleName, role, StringComparison.OrdinalIgnoreCase);
@@ -42,13 +51,5 @@
             if (!IsAuthenticated)
                 throw new UnauthorizedAccessException("User not authenticated");
         }
-    }
-
-    public class CPRMSHttpContent
-    {
-        public string? UserId { get; set; }
-        public string? UserName { get; set; }
-        public string? RoleName { get; set; }
-        public bool IsAuthenticated => !string.IsNullOrEmpty(UserId);
     }
 }

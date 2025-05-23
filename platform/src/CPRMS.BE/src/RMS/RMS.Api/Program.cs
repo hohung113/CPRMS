@@ -9,6 +9,7 @@ using Rms.API.Middlewares;
 using Rms.Application.Extensions;
 using Rms.Application.Modules.Acedamic.Semesters.Commands.CreateSemester;
 using Rms.Application.Modules.UserManagement.CommandHandler;
+using Rms.Domain.Context;
 using Rms.Infrastructure.Extensions;
 using System.Text;
 public class Program
@@ -98,6 +99,7 @@ public class Program
         builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.AddApplication(builder.Configuration);
         builder.Services.AddHttpContextAccessor();
+        CPRMSHttpContext.Configure(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>());
         builder.Services.Configure<AccountSettings>(builder.Configuration.GetSection("Account"));
         builder.Services.Configure<RmsSystemConfig>(builder.Configuration.GetSection("RmsSystem"));
         builder.Configuration

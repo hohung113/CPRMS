@@ -159,9 +159,9 @@ namespace Rms.API.Controllers.Modules.Users
         [HttpGet("GetRoleName")]
         public async Task<IActionResult> GetRoleName()
         {
+            _logger.LogInformation("Controller UserId: {UserId}, UserName: {UserName}", CPRMSHttpContext.UserId, CPRMSHttpContext.UserName);
             var userId = CPRMSHttpContext.UserId;
             var userName = CPRMSHttpContext.UserName;
-            var role = CPRMSHttpContext.RoleName;
             var roleName = await _rmsDbContext.Roles.Where(x => x.IsDeleted == false).Select(x => x.RoleName).ToListAsync();
             return Ok(roleName);
         }

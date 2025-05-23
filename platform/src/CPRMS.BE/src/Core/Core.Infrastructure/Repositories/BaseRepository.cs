@@ -5,6 +5,7 @@ using Core.Domain.Models.Base;
 using Core.Domain.Query;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Rms.Domain.Context;
 using System.Linq.Expressions;
 
 namespace Core.Infrastructure.Repositories
@@ -19,8 +20,8 @@ namespace Core.Infrastructure.Repositories
         {
             get
             {
-                var userId = RunTimeContext.Current?.UserId ?? Guid.Empty;
-                return userId;
+                var userId = CPRMSHttpContext.UserId;
+                return Guid.Parse(userId);
             }
         }
 
