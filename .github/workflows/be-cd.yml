@@ -11,6 +11,7 @@ env:
   RG: cprms
 jobs:
   build:
+    name: Build and push image onto Docker Hub
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -39,6 +40,6 @@ jobs:
       - name: Deploy to ACA
         uses: azure/container-apps-deploy-action@v1
         with:
-          appName: ${{env.APP_NAME}}
+          containerAppName: ${{env.APP_NAME}}
           resourceGroup: ${{env.RG}}
-          image: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          imageToDeploy: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
