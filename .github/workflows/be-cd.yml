@@ -37,9 +37,11 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Deploy to ACA
-        uses: azure/container-apps-deploy-action@v1
-        with:
-          containerAppName: ${{env.APP_NAME}}
-          resourceGroup: ${{env.RG}}
-          imageToDeploy: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+      - name: Deploy to ACA by CLI
+        run: |
+          az config set extension.use_dynamic_install=yes_without_prompt
+
+          az containerapp update \
+            --name ${{ env.APP_NAME }} \
+            --resource-group ${{ env.RG }} \
+            --image ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
