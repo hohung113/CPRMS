@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Rms.Application.Modules.Acedamic.Dto
+﻿namespace Rms.Application.Modules.Acedamic.Semesters.Dtos
 {
-    public class SemesterDto
+    public class SemesterDto : CommonDto
     {
         public string Name { get; set; }
         public string? Description { get; set; }

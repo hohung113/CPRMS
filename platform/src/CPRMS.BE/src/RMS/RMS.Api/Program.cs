@@ -7,11 +7,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Rms.API.Middlewares;
 using Rms.Application.Extensions;
-using Rms.Application.Modules.Acedamic.CommandHandler;
+using Rms.Application.Modules.Acedamic.Semesters.Commands.CreateSemester;
+using Rms.Application.Modules.UserManagement.CommandHandler;
 using Rms.Infrastructure.Extensions;
 using System.Text;
-using Rms.Application.Modules.UserManagement.CommandHandler;
-using Rms.API.Middlewares;
 public class Program
 {
     public static void Main(string[] args)

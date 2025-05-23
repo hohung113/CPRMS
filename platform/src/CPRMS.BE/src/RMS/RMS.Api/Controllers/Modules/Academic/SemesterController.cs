@@ -1,28 +1,43 @@
-﻿using Rms.Application.Modules.Acedamic.Command;
-using Rms.Application.Modules.Acedamic.QueryHandler;
+﻿using Core.Application.Dtos;
+using Rms.Application.Modules.Acedamic.Semesters.Commands.CreateSemester;
+using Rms.Application.Modules.Acedamic.Semesters.Dtos;
+using Rms.Application.Modules.Acedamic.Semesters.Queries;
 
 namespace Rms.API.Controllers.Modules.Academic
 {
     public class SemesterController : BaseControllerV1
     {
+        private readonly ILogger<SemesterController> _logger;
         private readonly SemesterQueryHandler semesterQueryHandler;
-        public SemesterController(SemesterQueryHandler semesterQueryHandler)
+        public SemesterController(SemesterQueryHandler semesterQueryHandler,
+            ILogger<SemesterController> logger)
         {
             this.semesterQueryHandler = semesterQueryHandler;
+            _logger = logger;
         }
-        ////[Authorize(Roles ="Admin")]
-        [HttpPost]
-        public async Task<IActionResult> CreateSemester([FromBody] CreateSemesterCommand command)
+
+        [HttpPost("createsemester")]
+        public async Task<IActionResult> CreateSemester([FromBody] SemesterDto request)
         {
-            var result = await Dispatcher.Send(command);
+            var cmd = request.Adapt<CreateSemesterCommand>();
+            var result = await Dispatcher.Send(cmd);
             return Ok(result);
-            //return CreatedAtAction(nameof(GetSemesterById), new { id = result.Id }, result); // Example, you'd need a GetSemesterById endpoint
+            //return CreatedAtAction(nameof(GetSemesterById), new { id = result.Id }, result);
         }
+        #region For Page Return Only item and count
         [HttpGet("GetAllSemesters")]
-        public async Task<IActionResult> GetAllSemesters()
+        public async Task<BasePagedResultDto<SemesterDto>> GetAllSemesters()
         {
             var result = await semesterQueryHandler.GetAllSemesters();
-            return Ok(result);
-        }
+            var listResults = result.ToList();
+            return new BasePagedResultDto<SemesterDto>
+            {
+                Items = listResults,
+                TotalItems = listResults.Count
+            };
+        } 
+        #endregion
+
+
     }
 }
