@@ -1,26 +1,26 @@
 ﻿namespace Core.Application.Dtos
 {
-    public class PagedResultDto<T>
+    public class BasePagedResultDto<T>
     {
-        public PagedResultDto(List<T> items, int totalItemsCount)
+        public BasePagedResultDto(List<T> items, int totalItemsCount)
         {
             Items = items;
-            TotalItemsCount = totalItemsCount;
+            TotalItems = totalItemsCount;
         }
 
-        public PagedResultDto()
+        public BasePagedResultDto()
         {
 
         }
         public required List<T> Items { get; init; }
-        public int TotalItemsCount { get; init; }
+        public int TotalItems { get; init; }
 
-        public PagedResultDto<TDto> ToPagedResultDto<TDto>(List<TDto> list, int count)
+        public BasePagedResultDto<TDto> ToPagedResultDto<TDto>(List<TDto> list, int count)
         {
-            return new PagedResultDto<TDto>
+            return new BasePagedResultDto<TDto>
             {
                 Items = list,
-                TotalItemsCount = count
+                TotalItems = count
             };
         }
     }

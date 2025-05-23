@@ -23,6 +23,7 @@ namespace Rms.API.Middlewares
         {
             try
             {
+                CPRMSHttpContext.Clear();
                 var token = ExtractTokenFromHeader(context);
                 if (!string.IsNullOrEmpty(token))
                 {
@@ -38,7 +39,7 @@ namespace Rms.API.Middlewares
             }
             finally
             {
-                CPRMSHttpContext.Clear(context);
+                CPRMSHttpContext.Clear();
             }
         }
 
@@ -80,6 +81,7 @@ namespace Rms.API.Middlewares
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken validatedToken);
+
                 if (validatedToken is JwtSecurityToken jwtSecurityToken)
                 {
                     if (!jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
@@ -90,18 +92,13 @@ namespace Rms.API.Middlewares
                 }
 
                 // Set user context
-                context.User = principal;
+                var userId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userName = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+                var roleName = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
 
-                var cprmsContext = new CPRMSHttpContextData
-                {
-                    UserId = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value,
-                    UserName = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value,
-                    RoleName = principal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value
-                };
+                CPRMSHttpContext.SetCurrentUser(userId, userName, roleName);
 
-                CPRMSHttpContext.Set(context, cprmsContext);
-
-                _logger.LogInformation("User authenticated: {UserId}, {UserName}", cprmsContext.UserId, cprmsContext.UserName);
+                _logger.LogInformation("User authenticated: {UserId}, {UserName}, {Role}", userId, userName, roleName);
             }
             catch (SecurityTokenExpiredException ex)
             {

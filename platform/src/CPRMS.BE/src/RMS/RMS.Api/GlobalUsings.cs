@@ -1,5 +1,6 @@
 ﻿global using Core.Api.Controller;
 global using MediatR;
+global using Mapster;
 global using Microsoft.AspNetCore.Mvc;
 global using Core.Domain.Models.Base;
 global using Microsoft.EntityFrameworkCore;

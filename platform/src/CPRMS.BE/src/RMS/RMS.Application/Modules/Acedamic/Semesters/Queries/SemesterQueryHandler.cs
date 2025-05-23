@@ -1,6 +1,6 @@
-﻿using Rms.Domain.Modules.Academic.Interface;
+﻿using Rms.Application.Modules.Acedamic.Semesters.Dtos;
 
-namespace Rms.Application.Modules.Acedamic.QueryHandler
+namespace Rms.Application.Modules.Acedamic.Semesters.Queries
 {
     public class SemesterQueryHandler
     {

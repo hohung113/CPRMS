@@ -1,4 +1,6 @@
-﻿namespace Rms.Application.Extensions
+﻿using Rms.Application.Modules.Acedamic.Semesters.Queries;
+
+namespace Rms.Application.Extensions
 {
     public static class ServiceCollectionExtensions
     {
@@ -13,7 +15,6 @@
 
             services.AddScoped<UserSystemQueryHandler>();
             services.AddScoped<SemesterQueryHandler>();
-            services.AddScoped<GetAllProfessionsQueryHandler>();
             services.AddMapster();
 
             services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);

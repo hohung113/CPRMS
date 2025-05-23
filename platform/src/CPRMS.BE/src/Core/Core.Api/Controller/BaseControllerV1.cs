@@ -12,6 +12,5 @@ namespace Core.Api.Controller
     {
         private IDispatcher _dispatcher;
         protected IDispatcher Dispatcher => _dispatcher ??= HttpContext.RequestServices.GetRequiredService<IDispatcher>();
-        protected string CurrentUserId => CPRMSHttpContext.Get(HttpContext).UserId;
     }
 }
