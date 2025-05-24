@@ -1,7 +1,6 @@
 ﻿using Core.Api.MediatRCustom;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Rms.Domain.Context;
 
 namespace Core.Api.Controller
 {

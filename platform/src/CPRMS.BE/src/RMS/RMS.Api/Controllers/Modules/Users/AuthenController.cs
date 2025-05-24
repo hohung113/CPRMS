@@ -7,13 +7,12 @@ using Rms.Application.Modules.UserManagement.QueryHandler;
 using Rms.Domain.Constants;
 using Rms.Domain.Context;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.WebSockets;
 using System.Security.Claims;
 using System.Text;
 
 namespace Rms.API.Controllers.Modules.Users
 {
-    public class AuthenController : BaseControllerV1 
+    public class AuthenController : BaseControllerV1
     {
         private readonly UserSystemQueryHandler _queryHandler;
         private readonly ILogger<AuthenController> _logger;
@@ -74,8 +73,9 @@ namespace Rms.API.Controllers.Modules.Users
             }
             try
             {
-                if (userSystemInfor.Email == _accountSettings.Admin.Email) {
-                   // Create Admin Account
+                if (userSystemInfor.Email == _accountSettings.Admin.Email)
+                {
+                    // Create Admin Account
                     CreateUserCommand command = new CreateUserCommand
                     {
                         Code = CprmsConstants.CprmsAdmin,
@@ -111,10 +111,10 @@ namespace Rms.API.Controllers.Modules.Users
 
             var claims = new List<Claim>
             {
-                //new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.FullName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                //new Claim(JwtRegisteredClaimNames.Sub, user.Email),
                 //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
             if (user.RoleNames != null)
@@ -171,13 +171,3 @@ namespace Rms.API.Controllers.Modules.Users
         }
     }
 }
-//var authResult = await HttpContext.AuthenticateAsync();
-//var accessToken = authResult.Properties.GetTokenValue("access_token");
-//var claims = authResult.Principal.Claims;
-//var principal = authResult.Principal;
-//var email = principal.FindFirstValue(ClaimTypes.Email);
-
-//using var client = new HttpClient();
-//client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
-//var response = await client.GetAsync("https://www.googleapis.com/oauth2/v2/userinfo");
-//var json = await response.Content.ReadAsStringAsync();

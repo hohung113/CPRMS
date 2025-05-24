@@ -7,7 +7,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Rms.API.Middlewares;
 using Rms.Application.Extensions;
-using Rms.Application.Modules.Acedamic.Semesters.Commands.CreateSemester;
 using Rms.Application.Modules.UserManagement.CommandHandler;
 using Rms.Domain.Context;
 using Rms.Infrastructure.Extensions;
@@ -36,7 +35,6 @@ public class Program
             options.LowercaseUrls = true;
             //options.LowercaseQueryStrings = true;
         });
-        // builder.Services.AddMapster(); 
         builder.Services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(CreateSemesterCommandHandler).Assembly);
@@ -44,7 +42,6 @@ public class Program
         });
   
         builder.Services.AddScoped<IDispatcher, Dispatcher>();
-        //builder.Services.AddMapster();
         builder.Services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new OpenApiInfo
@@ -58,11 +55,6 @@ public class Program
                     Email = "hunghpvde170589@fpt.edu.com",
                     Url = new Uri("https://www.facebook.com/id130203")
                 },
-                // License = new OpenApiLicense
-                // {
-                //     Name = " MIT",
-                //     Url = new Uri("https://opensource.org/licenses/MIT")
-                // }
             });
 
             options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -107,59 +99,11 @@ public class Program
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
             .AddEnvironmentVariables();
-        // Google - JWT - Cookie Config
-        //builder.Services.AddAuthentication(options =>
-        //{
-        //    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        //    //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-        //    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-        //})
-        //.AddCookie()
-        //.AddGoogle(options =>
-        //{
-        //    options.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? throw new InvalidOperationException("Google ClientId not configured.");
-        //    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? throw new InvalidOperationException("Google ClientSecret not configured.");
-        //    options.Scope.Add("email");
-        //    options.Scope.Add("profile");
-        //    //options.ClaimActions.MapJsonKey("urn:google:email", "email", "string");
-        //    options.SaveTokens = true;
-        //})
-        //.AddJwtBearer(options =>
-        //{
-        //    options.SaveToken = true;
-        //    options.RequireHttpsMetadata = builder.Environment.IsProduction(); // True cho production
-
-        //    options.TokenValidationParameters = new TokenValidationParameters
-        //    {
-        //        ValidateIssuer = true,
-        //        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        //        ValidateAudience = true,
-        //        ValidAudience = builder.Configuration["Jwt:Audience"],
-        //        ValidateIssuerSigningKey = true,
-        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        //        ValidateLifetime = true,
-        //        ClockSkew = TimeSpan.Zero
-        //    };
-        //});
         builder.Services.AddAuthentication(options =>
         {
-            // Khi một [Authorize] attribute được sử dụng mà không chỉ định scheme,
-            // hãy cố gắng xác thực bằng JWT Bearer trước tiên.
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            // Nếu xác thực JWT thất bại cho một API và cần "challenge",
-            // hãy sử dụng challenge của JWT Bearer (thường trả về 401 Unauthorized).
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            // Đối với luồng đăng nhập Google (OAuth), khi Google xác thực xong và
-            // ứng dụng của bạn cần "đăng nhập" người dùng vào hệ thống (thường là qua cookie tạm thời),
-            // hãy sử dụng scheme Cookie.
             options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-
-            // Bạn có thể đặt DefaultScheme là JWT nếu phần lớn ứng dụng của bạn là API.
-            // Hoặc có thể bỏ qua nếu DefaultAuthenticateScheme và DefaultChallengeScheme đã rõ ràng.
-            // options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddCookie(options => {
             options.Events.OnRedirectToLogin = context =>
@@ -235,16 +179,11 @@ public class Program
                 c.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi2_0;
             });
             app.UseSwaggerUI();
-            //app.UseSwaggerUI(options =>
-            //{
-            //    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Rms.API v1");
-            //    // options.RoutePrefix = string.Empty;
-            //});
         }
      
         app.UseExceptionHandler("/error");
-        //app.UseMiddleware<TenantResolutionMiddleware>();
-        app.UseMiddleware<ExceptionHandlingMiddleware>();
+        app.UseGlobalExceptionHandlerMiddleware();
+        //app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.UseMiddleware<JwtAuthenticationMiddleware>();
         app.UseHttpsRedirection();
         app.UseRouting();

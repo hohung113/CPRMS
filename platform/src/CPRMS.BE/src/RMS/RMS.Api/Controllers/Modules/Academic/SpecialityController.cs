@@ -1,13 +1,4 @@
-﻿using Core.Application.Dtos;
-using Rms.Application.Modules.Acedamic.Professions.Commands.CreateProfession;
-using Rms.Application.Modules.Acedamic.Professions.Dtos;
-using Rms.Application.Modules.Specialities.Commands.CreateSpeciality;
-using Rms.Application.Modules.Specialities.Commands.DeleteSpeciality;
-using Rms.Application.Modules.Specialities.Commands.UpdateSpeciality;
-using Rms.Application.Modules.Specialities.Dtos;
-using Rms.Application.Modules.Specialities.Queries.GellAllSpecialities;
-
-namespace Rms.API.Controllers.Modules.Academic
+﻿namespace Rms.API.Controllers.Modules.Academic
 {
     public class SpecialityController : BaseControllerV1
     {

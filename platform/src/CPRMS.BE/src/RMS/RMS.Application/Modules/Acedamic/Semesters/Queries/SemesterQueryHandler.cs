@@ -15,5 +15,11 @@ namespace Rms.Application.Modules.Acedamic.Semesters.Queries
             var semesterDto = result.Adapt<List<SemesterDto>>();
             return semesterDto;
         }
+        public async Task<SemesterDto> GetSemester(Guid id,CancellationToken cancellationToken = default)
+        {
+            var result = await _semesterRepository.GetEntity(id);
+            var semesterDto = result.Adapt<SemesterDto>();
+            return semesterDto;
+        }
     }
 }

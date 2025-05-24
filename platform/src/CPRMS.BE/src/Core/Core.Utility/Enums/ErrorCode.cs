@@ -8,7 +8,6 @@ namespace Core.Utility.Enums
 {
     public enum ErrorCode
     {
-        // Dinh nghia cac error code cho fe bat de hien message
         Unknow = 0,
         IsRequired = 1,
         InvalidFormat = 2,
@@ -20,6 +19,15 @@ namespace Core.Utility.Enums
         CookieIsExpired = 11,
         LogoutCookie = 12,
         InvalidLogin = 13,
+        ValidationError = 100,
+        Unauthorized = 200,   
+        Forbidden = 201,   
+        NotFound = 300,
+        Timeout = 400,              
+        Conflict = 401,  
+        InternalError = 500,       
+        ServiceUnavailable = 501,
+        CustomBusinessRule = 900    
     }
     public enum ResultStatus
     {

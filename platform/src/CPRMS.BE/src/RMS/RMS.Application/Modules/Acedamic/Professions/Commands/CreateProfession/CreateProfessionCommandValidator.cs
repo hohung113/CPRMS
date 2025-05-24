@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-
-namespace Rms.Application.Modules.Acedamic.Professions.Commands.CreateProfession
+﻿namespace Rms.Application.Modules.Acedamic.Professions.Commands.CreateProfession
 {
     public class CreateProfessionCommandValidator : AbstractValidator<CreateProfessionCommand>
     {
