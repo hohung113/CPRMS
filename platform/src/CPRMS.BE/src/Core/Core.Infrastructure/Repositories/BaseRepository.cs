@@ -51,10 +51,8 @@ namespace Core.Infrastructure.Repositories
         public async Task<List<TEntity>> AddEntities(List<TEntity> entities)
         {
             var preparedEntities = AddEntitiesCommon(entities);
-
             await _context.Set<TEntity>().AddRangeAsync(preparedEntities);
             await _context.SaveChangesAsync();
-
             return preparedEntities;
         }
 
@@ -99,7 +97,6 @@ namespace Core.Infrastructure.Repositories
             return await _context.Set<TEntity>().FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
         }
 
-
         public virtual async Task<BaseDataCollection<TEntity>> QueryEntities(PageModel page)
         {
             if (page.Total <= 0)
@@ -126,7 +123,6 @@ namespace Core.Infrastructure.Repositories
                 PageCount = pageCount 
             };
         }
-
 
         public virtual async Task<List<TEntity>> UpdateEntities(List<TEntity> entities)
         {
@@ -167,17 +163,8 @@ namespace Core.Infrastructure.Repositories
 
         public virtual async Task<TEntity> UpdateEntity(TEntity entity, Tuple<string, SqlParameter[]> condition)
         {
-            // Nen thiet ke sao cho can chuyen doi giua EF Core va sql raw cho mot so truong hop can thiet
             throw new Exception();
         }
-
-
-        /// <summary>
-        ///  
-        /// </summary>
-        /// <typeparam name="ConfigModel"></typeparam>
-        /// <param name="entity"></param>
-        /// <returns></returns>
         protected virtual async Task<TEntity> AddEntityCommon(TEntity entity)
         {
             if (entity == null)
@@ -188,15 +175,7 @@ namespace Core.Infrastructure.Repositories
             {
                 entity.Id = Guid.NewGuid();
             }
-            var now = DateTimeOffset.UtcNow;
-
-            // Audit information
-            entity.CreatedAt = now;
-            entity.LastModified = now;
-            entity.LastModifiedBy = this.CurrentUserId;
-            entity.IsDeleted = false;
-            ValidateEntity(entity);
-
+            SetAuditInformation(entity);
             await _context.Set<TEntity>().AddAsync(entity);
             await _context.SaveChangesAsync();
 
@@ -208,22 +187,12 @@ namespace Core.Infrastructure.Repositories
             if (entities == null || entities.Count == 0)
                 throw new ArgumentException("The entity list cannot be null or empty.", nameof(entities));
 
-            var now = DateTimeOffset.UtcNow;
 
             foreach (var entity in entities)
             {
                 if (entity == null)
                     throw new ArgumentNullException(nameof(entity), "Entity in the list cannot be null.");
-
-                if (entity.Id == Guid.Empty)
-                    entity.Id = Guid.NewGuid();
-
-                entity.CreatedAt = now;
-                entity.LastModified = now;
-                entity.LastModifiedBy = this.CurrentUserId;
-                entity.IsDeleted = false;
-
-                ValidateEntity(entity); 
+                SetAuditInformation(entity);
             }
 
             return entities;
@@ -235,11 +204,9 @@ namespace Core.Infrastructure.Repositories
 
             if (entity.IsDeleted)
                 throw new InvalidOperationException("The entity has already been marked as deleted.");
-            // Set entity's deletion information
             entity.LastModified = this.CurrentTime;
             entity.LastModifiedBy = this.CurrentUserId;
-            entity.IsDeleted = true; // Soft delete
-
+            entity.IsDeleted = true;
             return entity;
         }
 
@@ -252,8 +219,6 @@ namespace Core.Infrastructure.Repositories
             {
                 if (entity.IsDeleted)
                     throw new InvalidOperationException($"Entity with ID {entity.Id} has already been marked as deleted.");
-
-                // Mark each entity as deleted
                 entity.LastModified = this.CurrentTime;
                 entity.LastModifiedBy = this.CurrentUserId;
                 entity.IsDeleted = true;
@@ -281,28 +246,24 @@ namespace Core.Infrastructure.Repositories
 
             return true;
         }
-
-        protected virtual void ValidateEntity(TEntity entity)
-        {
-            if (entity.Id == Guid.Empty)
-            {
-                throw new InvalidOperationException("Entity ID must not be empty.");
-            }
-        }
-
-        public virtual async Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+        public virtual async Task<List<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> predicate, bool findIsDelete = false)
         {
             if (predicate == null)
             {
                 throw new ArgumentNullException(nameof(predicate));
             }
-            var parameter = Expression.Parameter(typeof(TEntity), "e");
-            var isDeletedProperty = Expression.Property(parameter, "IsDeleted");
-            var notDeleted = Expression.Equal(isDeletedProperty, Expression.Constant(false));
-            var body = Expression.AndAlso(notDeleted, Expression.Invoke(predicate, parameter));
-            var finalPredicate = Expression.Lambda<Func<TEntity, bool>>(body, parameter);
-
-            return await _context.Set<TEntity>().Where(finalPredicate).ToListAsync();
+            if (findIsDelete)
+            {
+                return await _context.Set<TEntity>().Where(predicate).ToListAsync();
+            }
+            {
+                var parameter = Expression.Parameter(typeof(TEntity), "e");
+                var isDeletedProperty = Expression.Property(parameter, "IsDeleted");
+                var notDeleted = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+                var body = Expression.AndAlso(notDeleted, Expression.Invoke(predicate, parameter));
+                var finalPredicate = Expression.Lambda<Func<TEntity, bool>>(body, parameter);
+                return await _context.Set<TEntity>().Where(finalPredicate).ToListAsync();
+            }
         }
 
         public virtual async Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
@@ -312,6 +273,19 @@ namespace Core.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(predicate));
             }
             return await _context.Set<TEntity>().Where(e => !e.IsDeleted).FirstOrDefaultAsync(predicate);
+        }
+        protected virtual void SetAuditInformation(TEntity entity)
+        {
+            var now = DateTimeOffset.UtcNow;
+            if (entity.Id == Guid.Empty || entity.Id == null)
+            {
+                entity.Id = Guid.NewGuid();
+            }
+            entity.CreatedAt = now;
+            entity.LastModified = now;
+            entity.LastModifiedBy = this.CurrentUserId;
+            entity.CreatedBy = this.CurrentUserId;
+            entity.IsDeleted = false;
         }
     }
 }

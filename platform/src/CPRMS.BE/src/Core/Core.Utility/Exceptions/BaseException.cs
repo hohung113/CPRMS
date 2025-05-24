@@ -16,7 +16,7 @@ namespace Core.Utility.Exceptions
         }
         public BaseException(string message) : base(message)
         {
-            ErrorCode = (int)Core.Utility.Enums.ErrorCode.Unknow;
+            ErrorCode = (int)Core.Utility.Enums.ErrorCode.None;
         }
 
         public BaseException(string message, int errorCode) : base(message)

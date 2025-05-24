@@ -1,6 +1,7 @@
 ﻿using Rms.Application.Modules.Acedamic.Professions.Queries.GellAllProfessions;
 using Rms.Application.Modules.Acedamic.Semesters.Queries;
 using Rms.Application.Modules.Specialities.Queries.GellAllSpecialities;
+using Rms.Application.Services;
 
 namespace Rms.Application.Extensions
 {
@@ -24,7 +25,10 @@ namespace Rms.Application.Extensions
             services.AddMapster();
 
             services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
+            services.AddTransient<TokenService>();
             services.AddFluentValidationAutoValidation();
+            services.Configure<AccountSettings>(configuration.GetSection("Account"));
+            services.Configure<RmsSystemConfig>(configuration.GetSection("RmsSystem"));
         }
     }
 }

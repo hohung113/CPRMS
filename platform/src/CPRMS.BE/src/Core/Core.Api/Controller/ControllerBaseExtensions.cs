@@ -139,7 +139,7 @@ namespace Core.Api.Controller
                     methodName, stopwatch.ElapsedMilliseconds, correlationId, ex.Message);
 
                 return AssembleErrorResponse<T>(
-                    ErrorCode.InternalError,
+                    ErrorCode.InternalServerError,
                     "An internal error occurred",
                     isView,
                     correlationId);

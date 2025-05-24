@@ -1,6 +1,4 @@
 ﻿using Core.Api.MediatRCustom;
-using Core.Api.Middlewares;
-using Core.Api.ServiceComponents.JWTService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -52,8 +50,8 @@ public class Program
                 Contact = new OpenApiContact
                 {
                     Name = "Contact with CPRMS Development",
-                    Email = "hunghpvde170589@fpt.edu.com",
-                    Url = new Uri("https://www.facebook.com/id130203")
+                    Email = "cprm@gmail.com",
+                    Url = new Uri("https://daihoc.fpt.edu.vn/")
                 },
             });
 
@@ -86,14 +84,10 @@ public class Program
                 }
             });
         });
-
-        builder.Services.AddScoped<TokenService>();
         builder.Services.AddInfrastructure(builder.Configuration);
         builder.Services.AddApplication(builder.Configuration);
         builder.Services.AddHttpContextAccessor();
         CPRMSHttpContext.Configure(builder.Services.BuildServiceProvider().GetRequiredService<IHttpContextAccessor>());
-        builder.Services.Configure<AccountSettings>(builder.Configuration.GetSection("Account"));
-        builder.Services.Configure<RmsSystemConfig>(builder.Configuration.GetSection("RmsSystem"));
         builder.Configuration
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

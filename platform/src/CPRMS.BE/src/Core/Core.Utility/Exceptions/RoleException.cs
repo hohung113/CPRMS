@@ -13,7 +13,7 @@ namespace Core.Utility.Exceptions
         protected RoleException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
-        public RoleException(string message) : base(message, (int)Enums.ErrorCode.Unknow)
+        public RoleException(string message) : base(message, (int)Enums.ErrorCode.None)
         {
         }
 

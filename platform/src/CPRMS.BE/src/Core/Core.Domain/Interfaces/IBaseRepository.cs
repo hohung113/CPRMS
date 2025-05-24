@@ -17,7 +17,7 @@ namespace Core.Domain.Interfaces
         public Task<Boolean> DeleteEntity(TEntity entity);
         public Task<Boolean> DeleteEntities(List<TEntity> entities);
         public Task<BaseDataCollection<TEntity>> QueryEntities(PageModel page);
-        public Task<List<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate);
+        public Task<List<TEntity>> FindByConditionAsync(Expression<Func<TEntity, bool>> predicate, bool findIsDelete = false);
         public Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }
