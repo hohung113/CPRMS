@@ -1,0 +1,17 @@
+﻿global using Core.Application.Dtos;
+global using Rms.Application.Modules.Acedamic.Semesters.Commands.CreateSemester;
+global using Rms.Application.Modules.Acedamic.Semesters.Commands.DeleteSemester;
+global using Rms.Application.Modules.Acedamic.Semesters.Commands.UpdateSemester;
+global using Rms.Application.Modules.Acedamic.Semesters.Dtos;
+global using Rms.Application.Modules.Acedamic.Semesters.Queries;
+global using Rms.Application.Modules.Acedamic.Professions.Commands.CreateProfession;
+global using Rms.Application.Modules.Acedamic.Professions.Dtos;
+global using Rms.Application.Modules.Specialities.Commands.DeleteSpeciality;
+global using Rms.Application.Modules.Specialities.Commands.UpdateSpeciality;
+global using Rms.Application.Modules.Specialities.Dtos;
+global using Rms.Application.Modules.Specialities.Queries.GellAllSpecialities;
+global using Microsoft.AspNetCore.Authorization;
+global using Rms.Application.Modules.Acedamic.Professions.Commands.DeleteProfession;
+global using Rms.Application.Modules.Acedamic.Professions.Commands.UpdateProfession;
+global using Rms.Application.Modules.Acedamic.Professions.Queries.GellAllProfessions;
+global using Rms.Domain.Constants;

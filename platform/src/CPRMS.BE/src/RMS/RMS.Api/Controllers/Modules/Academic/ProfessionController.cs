@@ -1,14 +1,4 @@
-﻿using Core.Application.Dtos;
-using Microsoft.AspNetCore.Authorization;
-using Rms.Application.Modules.Acedamic.Professions.Commands.CreateProfession;
-using Rms.Application.Modules.Acedamic.Professions.Commands.DeleteProfession;
-using Rms.Application.Modules.Acedamic.Professions.Commands.UpdateProfession;
-using Rms.Application.Modules.Acedamic.Professions.Dtos;
-using Rms.Application.Modules.Acedamic.Professions.Queries.GellAllProfessions;
-using Rms.Application.Modules.Acedamic.Semesters.Dtos;
-using Rms.Domain.Constants;
-
-namespace Rms.API.Controllers.Modules.Academic
+﻿namespace Rms.API.Controllers.Modules.Academic
 {
     public class ProfessionController : BaseControllerV1
     {

@@ -21,7 +21,11 @@ namespace Core.Infrastructure.Repositories
             get
             {
                 var userId = CPRMSHttpContext.UserId;
-                return Guid.TryParse(userId, out var guid) ? guid : Guid.Empty;
+                if (Guid.TryParse(userId, out var guid))
+                {
+                    return guid;
+                }
+                throw new InvalidOperationException("Current UserID is invalid or missing.");
             }
         }
 

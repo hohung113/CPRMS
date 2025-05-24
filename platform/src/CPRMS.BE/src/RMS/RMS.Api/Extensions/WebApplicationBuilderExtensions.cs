@@ -1,5 +1,4 @@
 ﻿using Microsoft.OpenApi.Models;
-using Rms.API.Middlewares;
 
 namespace Rms.API.Extensions
 {
@@ -31,8 +30,7 @@ namespace Rms.API.Extensions
             });
 
             builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddScoped<ErrorHandlingMiddleware>();
+            //builder.Services.AddScoped<ErrorHandlingMiddleware>();
             //builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
 
             //builder.Host.UseSerilog((context, configuration) =>
