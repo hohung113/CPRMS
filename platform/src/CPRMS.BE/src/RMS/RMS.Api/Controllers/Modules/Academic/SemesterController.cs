@@ -43,7 +43,7 @@
                 return result.Id;
             });
         }
-
+        [Authorize(Roles =CprmsRoles.Admin)]
         [HttpGet("getall")]
         public async Task<BaseResponse<IEnumerable<SemesterDto>>> GetRoles()
         {

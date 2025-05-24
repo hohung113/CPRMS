@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.Utility.Enums
+﻿namespace Core.Utility.Enums
 {
     public enum ErrorCode
     {
-        Unknow = 0,
+        None = 0,
         IsRequired = 1,
         InvalidFormat = 2,
         ExceedMaxLength = 3,
@@ -19,15 +13,16 @@ namespace Core.Utility.Enums
         CookieIsExpired = 11,
         LogoutCookie = 12,
         InvalidLogin = 13,
+        InvalidRequest = 14,
+        InternalServerError = 500,
         ValidationError = 100,
         Unauthorized = 200,   
         Forbidden = 201,   
         NotFound = 300,
         Timeout = 400,              
-        Conflict = 401,  
-        InternalError = 500,       
+        Conflict = 401,   
         ServiceUnavailable = 501,
-        CustomBusinessRule = 900    
+        CustomBusinessRule = 900  
     }
     public enum ResultStatus
     {

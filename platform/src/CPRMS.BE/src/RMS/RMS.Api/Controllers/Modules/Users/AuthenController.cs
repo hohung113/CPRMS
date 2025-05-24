@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
+﻿using Core.Utility.Enums;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Rms.Application.Modules.UserManagement.Command;
 using Rms.Application.Modules.UserManagement.Dto;
 using Rms.Application.Modules.UserManagement.QueryHandler;
-using Rms.Domain.Constants;
+using Rms.Application.Services;
 using Rms.Domain.Context;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 
 namespace Rms.API.Controllers.Modules.Users
 {
@@ -16,12 +13,11 @@ namespace Rms.API.Controllers.Modules.Users
     {
         private readonly UserSystemQueryHandler _queryHandler;
         private readonly ILogger<AuthenController> _logger;
-        private readonly IMediator _mediator;
         private readonly IConfiguration _config;
         private readonly RmsDbContext _rmsDbContext;
         private readonly AccountSettings _accountSettings;
         private readonly RmsSystemConfig _rmsSystemConfig;
-
+        private readonly TokenService _tokenService;
         public AuthenController(
             ILogger<AuthenController> logger,
             RmsDbContext rmsDbContext,
@@ -29,16 +25,17 @@ namespace Rms.API.Controllers.Modules.Users
             IOptions<AccountSettings> options,
             IOptions<RmsSystemConfig> rmsSystemConfig,
             UserSystemQueryHandler queryHandler,
+            TokenService tokenService,
             IConfiguration config
             )
         {
             _rmsDbContext = rmsDbContext;
             _logger = logger;
-            _mediator = mediator;
             _accountSettings = options.Value;
             _rmsSystemConfig = rmsSystemConfig.Value;
             _config = config;
             _queryHandler = queryHandler;
+            _tokenService = tokenService;
         }
 
         [HttpGet("google-login")]
@@ -50,112 +47,72 @@ namespace Rms.API.Controllers.Modules.Users
             }, GoogleDefaults.AuthenticationScheme);
         }
 
-
         [HttpGet("google-callback")]
-        public async Task<IActionResult> GoogleCallback()
+        public async Task<BaseResponse<TokenResponse>> GoogleCallback()
         {
             var authenticateResult = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (!authenticateResult.Succeeded || authenticateResult.Principal == null)
             {
-                return BadRequest("Validate when Google fails.");
+                return new BaseResponse<TokenResponse>
+                {
+                    State = ResponseState.Error,
+                    ErrorCode = ErrorCode.Unauthorized,
+                    Message = "Google authentication failed.",
+                    Result = null
+                };
             }
+
             var principal = authenticateResult.Principal;
             var email = principal.FindFirstValue(ClaimTypes.Email);
-            // check in system , account admin , account user 
-            GetGoogleUserDetailsQuery requestGmail = new GetGoogleUserDetailsQuery
+
+            if (string.IsNullOrEmpty(email))
             {
-                Email = email,
-            };
+                return new BaseResponse<TokenResponse>
+                {
+                    State = ResponseState.Error,
+                    ErrorCode = ErrorCode.InvalidRequest,
+                    Message = "Email not found in Google account.",
+                    Result = null
+                };
+            }
+
+            var requestGmail = new GetGoogleUserDetailsQuery { Email = email };
             var userSystemInfor = await _queryHandler.GetUserSystemByEmail(requestGmail);
+
             if (userSystemInfor == null)
             {
-                return Unauthorized("User does not exist in the system.");
-            }
-            try
-            {
-                if (userSystemInfor.Email == _accountSettings.Admin.Email)
+                return new BaseResponse<TokenResponse>
                 {
-                    // Create Admin Account
-                    CreateUserCommand command = new CreateUserCommand
-                    {
-                        Code = CprmsConstants.CprmsAdmin,
-                        Email = _accountSettings.Admin.Email,
-                        FullName = CprmsConstants.CprmsAdminDisplayName,
-                    };
-                    var result = await Dispatcher.Send(command);
-                }
-                var token = await GenerateJwtToken(userSystemInfor);
-                return Ok(new { token });
+                    State = ResponseState.Error,
+                    ErrorCode = ErrorCode.NotFound,
+                    Message = "User does not exist in the system.",
+                    Result = null
+                };
             }
-            catch (ArgumentNullException ex)
+            if (userSystemInfor.Email == _accountSettings.Admin.Email)
             {
-                _logger.LogWarning(ex.Message);
-                return BadRequest("Invalid user to generate token.");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error occurred during token generationn.");
-            }
-        }
-        private async Task<string> GenerateJwtToken(GoogleLoginResponseDto user)
-        {
-            var jwtSettings = _config.GetSection("Jwt");
-            var keyString = jwtSettings["Key"];
-            if (string.IsNullOrEmpty(keyString))
-            {
-                throw new InvalidOperationException("JWT Key not configured.");
-            }
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Name, user.FullName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-                //new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            };
-            if (user.RoleNames != null)
-            {
-                foreach (var roleName in user.RoleNames)
+                var command = new CreateUserCommand
                 {
-                    if (!string.IsNullOrEmpty(roleName))
-                    {
-                        claims.Add(new Claim(ClaimTypes.Role, roleName));
-                    }
-                }
-            }
-            double expiresInHours;
-            if (!double.TryParse(jwtSettings["ExpiresInHours"], out expiresInHours))
-            {
-                expiresInHours = 2;
+                    Code = CprmsConstants.CprmsAdmin,
+                    Email = _accountSettings.Admin.Email,
+                    FullName = CprmsConstants.CprmsAdminDisplayName,
+                };
+                await Dispatcher.Send(command);
             }
 
-            var tokenDescriptor = new JwtSecurityToken(
-                issuer: jwtSettings["Issuer"],
-                audience: jwtSettings["Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(expiresInHours),
-                signingCredentials: creds
-            );
+            var token = _tokenService.GenerateJwtToken(userSystemInfor);
 
-            return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
-        }
-
-        [Authorize(Roles = "Student")]
-        [HttpGet("getmemberofprojectCPRMS")]
-        public async Task<BaseResponse<UserResponse>> GetName()
-        {
-            var emailAdmin = _accountSettings.Admin.Email;
-            var response = new UserResponse
+            return new BaseResponse<TokenResponse>
             {
-                Name = "HungHPV - NhatNDA - TrieuLQ - QuyND - KhoaDD",
+                State = ResponseState.Ok,
+                ErrorCode = ErrorCode.None,
+                Message = "Token generated successfully.",
+                Result = token,
+                HasPermission = true
             };
-            return await this.Run<UserResponse>(_logger, async () => response);
         }
-        //[Authorize(Roles ="Admin")]
+
+        [Authorize(Roles =CprmsRoles.Student)]
         [HttpGet("GetRoleName")]
         public async Task<IActionResult> GetRoleName()
         {
@@ -164,10 +121,6 @@ namespace Rms.API.Controllers.Modules.Users
             var userName = CPRMSHttpContext.UserName;
             var roleName = await _rmsDbContext.Roles.Where(x => x.IsDeleted == false).Select(x => x.RoleName).ToListAsync();
             return Ok(roleName);
-        }
-        public class UserResponse
-        {
-            public string Name { get; set; }
         }
     }
 }

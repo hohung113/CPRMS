@@ -42,7 +42,7 @@
                 loginModelResponse.Id = user.Id;
                 loginModelResponse.FullName = user.FullName;
                 var roleNames = new List<string>();
-                var listRoleId = await _userRoleRepository.FindAsync(x => x.UserId == loginModelResponse.Id);
+                var listRoleId = await _userRoleRepository.FindByConditionAsync(x => x.UserId == loginModelResponse.Id);
                 foreach (var item in listRoleId)
                 {
                     var role = await _roleRepository.GetEntity(item.RoleId);
