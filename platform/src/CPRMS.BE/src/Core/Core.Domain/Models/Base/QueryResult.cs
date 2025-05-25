@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Domain.Models.Base
 {
-    public class QueryResult
+    public class QueryResult 
     {
         public EntityResult Result { get; set; } = default!;
         public PagingInfo Paging { get; set; } = default!;

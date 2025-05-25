@@ -45,12 +45,18 @@
         }
         [Authorize(Roles =CprmsRoles.Admin)]
         [HttpGet("getall")]
-        public async Task<BaseResponse<IEnumerable<SemesterDto>>> GetRoles()
+        public async Task<BaseResponse<IEnumerable<SemesterDto>>> GetAllSemester()
         {
             var result = semesterQueryHandler.GetAllSemesters();
             return await this.Run(_logger, () => result);
         }
 
+        //[HttpGet("paginationsemester")]
+        //public async Task<BaseResponse<IEnumerable<SemesterDto>>> GetAllSemester([FromBody]PagedRequest<> )
+        //{
+        //    var result = semesterQueryHandler.GetAllSemesters();
+        //    return await this.Run(_logger, () => result);
+        //}
         [HttpGet("{id}")]
         public async Task<BaseResponse<SemesterDto>> GetSemesterById(Guid id)
         {

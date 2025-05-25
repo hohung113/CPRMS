@@ -9,6 +9,12 @@ namespace Rms.Application.Modules.Acedamic.Semesters.Queries
         {
             _semesterRepository = semesterRepository;
         }
+        //public async Task<IEnumerable<SemesterDto>> GetPaginationSemesters( CancellationToken cancellationToken = default)
+        //{
+        //    var result = await _semesterRepository.FindByConditionAsync();
+        //    var semesterDto = result.Adapt<List<SemesterDto>>();
+        //    return semesterDto;
+        //}
         public async Task<IEnumerable<SemesterDto>> GetAllSemesters(CancellationToken cancellationToken = default)
         {
             var result = await _semesterRepository.GetEntities();

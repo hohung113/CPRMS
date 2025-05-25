@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Rms.Application.Modules.UserManagement.Command;
-using Rms.Domain.Constants;
+﻿using Rms.Application.Modules.UserManagement.Command;
 
 namespace Rms.API.Controllers.Modules.Users
 {
