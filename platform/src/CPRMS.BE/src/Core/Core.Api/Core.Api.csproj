@@ -8,15 +8,20 @@
 
   <ItemGroup>
     <Compile Remove="BaseProjectConfigs\**" />
+    <Compile Remove="ServiceComponents\GoogleGraph\**" />
+    <Compile Remove="ServiceComponents\MemoryResourceManager\**" />
+    <Compile Remove="ServiceComponents\MicrosoftGraph\**" />
+    <Compile Remove="ServiceComponents\StorageServices\**" />
     <EmbeddedResource Remove="BaseProjectConfigs\**" />
+    <EmbeddedResource Remove="ServiceComponents\GoogleGraph\**" />
+    <EmbeddedResource Remove="ServiceComponents\MemoryResourceManager\**" />
+    <EmbeddedResource Remove="ServiceComponents\MicrosoftGraph\**" />
+    <EmbeddedResource Remove="ServiceComponents\StorageServices\**" />
     <None Remove="BaseProjectConfigs\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ServiceComponents\MicrosoftGraph\" />
-    <Folder Include="ServiceComponents\GoogleGraph\" />
-    <Folder Include="ServiceComponents\MemoryResourceManager\" />
-    <Folder Include="ServiceComponents\StorageServices\" />
+    <None Remove="ServiceComponents\GoogleGraph\**" />
+    <None Remove="ServiceComponents\MemoryResourceManager\**" />
+    <None Remove="ServiceComponents\MicrosoftGraph\**" />
+    <None Remove="ServiceComponents\StorageServices\**" />
   </ItemGroup>
 
   <ItemGroup>

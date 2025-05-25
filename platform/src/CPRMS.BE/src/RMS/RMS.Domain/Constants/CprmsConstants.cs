@@ -1,4 +1,6 @@
-﻿namespace Rms.Domain.Constants
+﻿using Newtonsoft.Json;
+
+namespace Rms.Domain.Constants
 {
     public static class CprmsConstants
     {
@@ -13,5 +15,14 @@
         public const string HeadOfDepartment = "Head of Department";
         public const string AcademicAffairsOffice = "Academic Affairs Office";
         public const string Student = "Student";
+    }
+
+    public static class CprmsCampus
+    {
+        public const string FUDA = "FPTUDN";
+        public const string HN = "FPTUHN";
+        public const string HCM = "FPTUHCM";
+        public const string QN = "FPTUQN";
+        public const string CT = "FPTUCT";
     }
 }

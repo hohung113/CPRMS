@@ -8,8 +8,12 @@ namespace Rms.Infrastructure.Persistence
 {
     public class RmsDbContext : AppDbContext
     {
-        public RmsDbContext(DbContextOptions<RmsDbContext> options) : base(options)
+        private readonly IConfiguration _configuration;
+        private readonly ICampusProvider _campusProvider;
+        public RmsDbContext(DbContextOptions<RmsDbContext> options, IConfiguration configuration, ICampusProvider campusProvider) : base(options)
         {
+            _configuration = configuration;
+            _campusProvider = campusProvider;
         }
         public DbSet<UserSystem> UserSystems { get; set; }
         public DbSet<Role> Roles { get; set; }
@@ -18,7 +22,19 @@ namespace Rms.Infrastructure.Persistence
         public DbSet<Semester> Semesters { get; set; }
         public DbSet<Speciality> Specialities { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                var campusName = _campusProvider.CampusName;
+                var connectionString = _configuration.GetSection("CampusConnectionStrings")[campusName];
 
+                if (string.IsNullOrEmpty(connectionString))
+                    throw new Exception($"No connection string for tenant: {campusName}");
+
+                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+            }
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

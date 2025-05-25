@@ -13,7 +13,6 @@ namespace Rms.API.Controllers.Modules.Users
     {
         private readonly UserSystemQueryHandler _queryHandler;
         private readonly ILogger<AuthenController> _logger;
-        private readonly IConfiguration _config;
         private readonly RmsDbContext _rmsDbContext;
         private readonly AccountSettings _accountSettings;
         private readonly RmsSystemConfig _rmsSystemConfig;
@@ -25,15 +24,13 @@ namespace Rms.API.Controllers.Modules.Users
             IOptions<AccountSettings> options,
             IOptions<RmsSystemConfig> rmsSystemConfig,
             UserSystemQueryHandler queryHandler,
-            TokenService tokenService,
-            IConfiguration config
+            TokenService tokenService
             )
         {
             _rmsDbContext = rmsDbContext;
             _logger = logger;
             _accountSettings = options.Value;
             _rmsSystemConfig = rmsSystemConfig.Value;
-            _config = config;
             _queryHandler = queryHandler;
             _tokenService = tokenService;
         }

@@ -1,4 +1,5 @@
-﻿using Core.Api.MediatRCustom;
+﻿using Autofac.Core;
+using Core.Api.MediatRCustom;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -176,6 +177,7 @@ public class Program
         }
      
         app.UseExceptionHandler("/error");
+        app.UseMiddleware<CampusResolutionMiddleware>();
         app.UseGlobalExceptionHandlerMiddleware();
         //app.UseMiddleware<ExceptionHandlingMiddleware>();
         app.UseMiddleware<JwtAuthenticationMiddleware>();
